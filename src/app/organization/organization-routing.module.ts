@@ -33,6 +33,8 @@ import { HolidaysComponent } from './holidays/holidays.component';
 import { EditEmployeeComponent } from './employees/edit-employee/edit-employee.component';
 import { CreateTellerComponent } from './tellers/create-teller/create-teller.component';
 import { EditTellerComponent } from './tellers/edit-teller/edit-teller.component';
+import { ViewCashierComponent } from './tellers/view-cashier/view-cashier.component';
+import { ViewHolidaysComponent } from './holidays/view-holidays/view-holidays.component';
 
 /** Custom Resolvers */
 import { LoanProvisioningCriteriaResolver } from './loan-provisioning-criteria/loan-provisioning-criteria.resolver';
@@ -56,6 +58,8 @@ import { EditOfficeComponent } from './offices/edit-office/edit-office.component
 import { AdhocQueryTemplateResolver } from './adhoc-query/adhoc-query-template.resolver';
 import { ViewLoanProvisioningCriteriaComponent } from './loan-provisioning-criteria/view-loan-provisioning-criteria/view-loan-provisioning-criteria.component';
 import { LoanProvisioningCriteriasResolver } from './loan-provisioning-criteria/loan-provisioning-criterias.resolver';
+import { CashierResolver } from './tellers/cashier.resolver';
+import { HolidayResolver } from './holidays/holiday.resolver';
 
 /** Organization Routes */
 const routes: Routes = [
@@ -255,6 +259,20 @@ const routes: Routes = [
                     teller: TellerResolver,
                     offices: OfficesResolver
                   }
+                },
+                {
+                  path: 'cashiers',
+                  data: { title: extract('View Cashiers'), breadcrumb: 'View Cashiers', routeParamBreadcrumb: false },
+                  children: [
+                    {
+                      path: ':id',
+                      component: ViewCashierComponent,
+                      data: { title: extract('View Cashier'), breadcrumb: 'View Cashier', routeParamBreadcrumb: 'id' },
+                      resolve: {
+                        cashier: CashierResolver
+                      }
+                    }
+                  ]
                 }
               ]
             }
@@ -322,11 +340,29 @@ const routes: Routes = [
         },
         {
           path: 'holidays',
-          component: HolidaysComponent,
           data: { title: extract('Manage Holidays'), breadcrumb: 'Manage Holidays' },
-          resolve: {
-            offices: OfficesResolver
-          }
+          children: [
+            {
+              path: '',
+              component: HolidaysComponent,
+              resolve: {
+                offices: OfficesResolver
+              }
+            },
+            {
+              path: ':id',
+              data: { title: extract('View Holidays'), routeParamBreadcrumb: 'id' },
+              children: [
+                {
+                  path: '',
+                  component: ViewHolidaysComponent,
+                  resolve: {
+                    holidays: HolidayResolver
+                  }
+                }
+              ]
+            }
+          ]
         }
       ]
     }
@@ -361,6 +397,8 @@ const routes: Routes = [
     EditOfficeResolver,
     AdhocQueryTemplateResolver,
     LoanProvisioningCriteriasResolver,
+    CashierResolver,
+    HolidayResolver
   ]
 })
 export class OrganizationRoutingModule { }

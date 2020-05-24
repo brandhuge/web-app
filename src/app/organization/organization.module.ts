@@ -33,6 +33,8 @@ import { EditEmployeeComponent } from './employees/edit-employee/edit-employee.c
 import { CreateTellerComponent } from './tellers/create-teller/create-teller.component';
 import { EditTellerComponent } from './tellers/edit-teller/edit-teller.component';
 import { ViewLoanProvisioningCriteriaComponent } from './loan-provisioning-criteria/view-loan-provisioning-criteria/view-loan-provisioning-criteria.component';
+import { ViewCashierComponent } from './tellers/view-cashier/view-cashier.component';
+import { ViewHolidaysComponent } from './holidays/view-holidays/view-holidays.component';
 
 /**
  * Organization Module
@@ -72,6 +74,8 @@ import { ViewLoanProvisioningCriteriaComponent } from './loan-provisioning-crite
     CreateTellerComponent,
     EditTellerComponent,
     ViewLoanProvisioningCriteriaComponent,
+    ViewCashierComponent,
+    ViewHolidaysComponent
   ]
 })
 export class OrganizationModule { }

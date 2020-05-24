@@ -177,6 +177,16 @@ export class OrganizationService {
   }
 
   /**
+   * Get Cashier data.
+   * @param {string} tellerId Teller ID of teller.
+   * @param {string} cashierId Cashier ID of cashier
+   * @returns {Observable<any>} Cashier data.
+   */
+  getCashier(tellerId: string, cashierId: string): Observable<any> {
+    return this.http.get(`/tellers/${tellerId}/cashiers/${cashierId}`);
+  }
+
+  /**
    * @param {string} tellerId Teller ID of teller to be deleted.
    * @returns {Observable<any>}
    */
@@ -289,6 +299,24 @@ export class OrganizationService {
     const httpParams = new HttpParams()
       .set('officeId', officeId.toString());
     return this.http.get('/holidays', { params: httpParams });
+  }
+
+  /**
+   * Get Holiday data.
+   * @param holidayId Holiday Id of holidays.
+   * @returns {Observable<any>} Holiday data.
+   */
+  getHoliday(holidayId: string): Observable<any> {
+    return this.http.get(`/holidays/${holidayId}`);
+  }
+
+  /**
+   * Delete Holiday.
+   * @param holidayId Holiday Id to be deleted.
+   * @returns {Observable<any>} Resource Id.
+   */
+  deleteHoliday(holidayId: string) {
+    return this.http.delete(`/holidays/${holidayId}`);
   }
 
   /**
