@@ -133,7 +133,7 @@
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="openLoansColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: openLoansColumns;"></tr>
+    <tr mat-row *matRowDef="let row; columns: openLoansColumns;" [routerLink]="['/clients', clientid, 'loans', row.id, 'general']" class="select-row"></tr>
   </table>
 
   <!-- Closed Loan Accounts -->
@@ -243,7 +243,7 @@
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="openSavingsColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: openSavingsColumns;"></tr>
+    <tr mat-row *matRowDef="let row; columns: openSavingsColumns;" [routerLink]="['../', 'savingsaccounts', row.id, 'transactions']"></tr>
   </table>
 
   <!-- Closed Saving Accounts -->
@@ -318,7 +318,7 @@
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="openSharesColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: openSharesColumns;"></tr>
+    <tr mat-row *matRowDef="let row; columns: openSharesColumns;" [routerLink]="['../', 'sharesaccounts', row.id, 'transactions']"></tr>
   </table>
   <!-- Closed Share Accounts -->
   <table *ngIf="showClosedShareAccounts" mat-table [dataSource]="shareAccounts|accountsFilter:'share':'closed'">

@@ -83,6 +83,56 @@ export class OrganizationService {
     return this.http.put(`/offices/${officeId}`, office);
   }
 
+ /**
+  * @returns {Observable<any>}
+  */
+  getOfficeDatatables(): Observable<any> {
+    const httpParams = new HttpParams().set('apptable', 'm_office');
+    return this.http.get(`/datatables`, { params: httpParams });
+  }
+
+  /**
+   * @param officeId Office Id of office to get datatable for.
+   * @param datatableName Data table name.
+   * @returns {Observable<any>}
+   */
+  getOfficeDatatable(officeId: string, datatableName: string): Observable<any> {
+    const httpParams = new HttpParams().set('genericResultSet', 'true');
+    return this.http.get(`/datatables/${datatableName}/${officeId}`, { params: httpParams });
+  }
+
+  /**
+   * @param officeId Office Id of office to get add datatable entry for.
+   * @param datatableName Data Table name.
+   * @param data Data.
+   * @returns {Observable<any>}
+   */
+  addOfficeDatatableEntry(officeId: string, datatableName: string, data: any): Observable<any> {
+    const httpParams = new HttpParams().set('genericResultSet', 'true');
+    return this.http.post(`/datatables/${datatableName}/${officeId}`, data, { params: httpParams });
+  }
+
+  /**
+   * @param officeId Office Id of office to get add datatable entry for.
+   * @param datatableName Data Table name.
+   * @param data Data.
+   * @returns {Observable<any>}
+   */
+  editOfficeDatatableEntry(officeId: string, datatableName: string, data: any): Observable<any> {
+    const httpParams = new HttpParams().set('genericResultSet', 'true');
+    return this.http.put(`/datatables/${datatableName}/${officeId}`, data, { params: httpParams });
+  }
+
+  /**
+   * @param officeId Office Id of office to get add datatable entry for.
+   * @param datatableName Data Table name.
+   * @returns {Observable<any>}
+   */
+  deleteDatatableContent(officeId: string, datatableName: string): Observable<any> {
+    const httpParams = new HttpParams().set('genericResultSet', 'true');
+    return this.http.delete(`/datatables/${datatableName}/${officeId}`, { params: httpParams });
+  }
+
   /**
    * @returns {Observable<any>} Employees data
    */
@@ -121,6 +171,28 @@ export class OrganizationService {
    */
   getSmsCampaigns(): Observable<any> {
     return this.http.get('/smscampaigns');
+  }
+
+  /**
+   * @param {string} smsCampaignId SMS Campaign ID of SMS Campaign.
+   * @returns {Observable<any>} SMS Campaign.
+   */
+  getSmsCampaign(smsCampaignId: string): Observable<any> {
+    return this.http.get(`/smscampaigns/${smsCampaignId}`);
+  }
+
+  /**
+   * @param {any} SMS
+   * @returns {Observable<any>} Messages Data
+   */
+  getMessagebyStatus(SMS: any): Observable<any> {
+    let httpParams = new HttpParams()
+      .set('status', SMS.status.toString())
+      .set('locale', SMS.locale)
+      .set('dateFormat', SMS.dateFormat);
+    httpParams = SMS.fromDate ? httpParams.set('fromDate', SMS.fromDate) : httpParams;
+    httpParams = SMS.toDate ? httpParams.set('toDate', SMS.toDate) : httpParams;
+    return this.http.get(`/sms/${SMS.id}/messageByStatus`, { params: httpParams });
   }
 
   /**
