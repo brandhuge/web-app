@@ -16,11 +16,17 @@ export class LoanAccountActionsComponent {
   actions: { close: boolean,
             undo_approval: boolean,
             assign_loan_officer: boolean,
-            foreclosure: boolean } = {
+            foreclosure: boolean,
+            prepay_loan: boolean,
+            make_repayment: boolean,
+            waive_interest: boolean } = {
               close: false,
               undo_approval: false,
               assign_loan_officer: false,
-              foreclosure: false };
+              foreclosure: false,
+              prepay_loan: false,
+              make_repayment: false,
+              waive_interest: false };
   actionButtonData: any;
   actionName: any;
 

@@ -17,6 +17,7 @@ import { OriginalScheduleTabComponent } from './loans-view/original-schedule-tab
 import { OverdueChargesTabComponent } from './loans-view/overdue-charges-tab/overdue-charges-tab.component';
 import { ChargesTabComponent } from './loans-view/charges-tab/charges-tab.component';
 import { DatatableTabComponent } from './loans-view/datatable-tab/datatable-tab.component';
+import { LoanAccountActionsComponent } from './loans-view/loan-account-actions/loan-account-actions.component';
 
 /** Custom Resolvers */
 import { LoanChargeTemplateResolver } from './common-resolvers/loan-charge-template.resolver';
@@ -24,10 +25,10 @@ import { LoanDetailsResolver } from './common-resolvers/loan-details.resolver';
 import { LoanDetailsGeneralResolver } from './common-resolvers/loan-details-general.resolver';
 import { LoanNotesResolver } from './common-resolvers/loan-notes-resolver';
 import { LoanDetailsChargesResolver } from './common-resolvers/loan-details-charges.resolver';
-import { LoanAccountActionsComponent } from './loans-view/loan-account-actions/loan-account-actions.component';
 import { LoanDatatablesResolver } from './common-resolvers/loan-datatables.resolver';
 import { LoanDatatableResolver } from './common-resolvers/loan-datatable.resolver';
-import { LoanActionButtonResolver } from './common-resolvers/loan-action-button-resolver';
+import { LoanActionButtonResolver } from './common-resolvers/loan-action-button.resolver';
+import { FloatingInterestRatesComponent } from './loans-view/floating-interest-rates/floating-interest-rates.component';
 
 const routes: Routes = [
   {
@@ -89,6 +90,14 @@ const routes: Routes = [
           data: { title: extract('Overdue Charges'), breadcrumb: 'Overdue Charges', routeParamBreadcrumb: false },
           resolve: {
             loanDetailsData: LoanDetailsGeneralResolver
+          }
+        },
+        {
+          path: 'floating-interest-rates',
+          component: FloatingInterestRatesComponent,
+          data: { title: extract('Floating Interest Rates'), breadcrumb: 'Floating Interest Rates', routeParamBreadcrumb: false },
+          resolve: {
+            loanDetailsAssociationData: LoanDetailsChargesResolver
           }
         },
         {
