@@ -1,8 +1,9 @@
 /** Angular Imports */
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
-import { MatPaginator, MatSort, MatCheckbox } from '@angular/material';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 import { FormControl } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
 
 /** rxjs Imports */
 import { merge } from 'rxjs';
@@ -23,7 +24,7 @@ import { GroupsDataSource } from './groups.datasource';
   styleUrls: ['./groups.component.scss']
 })
 export class GroupsComponent implements OnInit, AfterViewInit {
-  @ViewChild('showClosedGroups') showClosedGroups: MatCheckbox;
+  @ViewChild('showClosedGroups', { static: true }) showClosedGroups: MatCheckbox;
 
   /** Name form control. */
   name = new FormControl();
@@ -40,10 +41,13 @@ export class GroupsComponent implements OnInit, AfterViewInit {
   ];
 
   /** Paginator for groups table. */
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   /** Sorter for groups table. */
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
+  /**
+   * @param {GroupsService} groupsService Groups Service
+   */
   constructor(private groupsService: GroupsService) { }
 
   ngOnInit() {

@@ -8,7 +8,7 @@
         <div>
           <img mat-card-md-image class="profile-image"
             matTooltip="Savings Account"
-            src="assets/images/savings_account_placeholder.png">
+            [src]="'assets/images/savings_account_placeholder.png'">
         </div>
       </div>
 
@@ -21,7 +21,7 @@
         </mat-card-title>
         <mat-card-subtitle>
           <p>
-            Account #: {{savingsAccountData.accountNo}} | Client Name: {{savingsAccountData.clientName}}<br/>
+            Account #: {{savingsAccountData.accountNo}} | {{entityType}} Name: {{savingsAccountData.clientName || savingsAccountData.groupName}}<br/>
             <span *ngIf="!savingsAccountData.status.rejected && !savingsAccountData.status.submittedAndPendingApproval">
               Current Balance: {{savingsAccountData.currency.displaySymbol}}&nbsp;{{savingsAccountData.summary.accountBalance}}<br/>
               Available Balance: {{savingsAccountData.currency.displaySymbol}}&nbsp;{{savingsAccountData.summary.availableBalance}}<br/>
@@ -35,15 +35,15 @@
     <mat-card-actions class="account-actions">
 
       <ng-container *ngFor="let button of buttonConfig.singleButtons">
-        <button mat-raised-button *mifosxHasPermission="button.taskPermissionName">
+        <button mat-raised-button *mifosxHasPermission="button.taskPermissionName" (click)="doAction(button.name)">
           <i class="{{button.icon}}"></i> {{button.name}}</button>
       </ng-container>
   
       <ng-container *ngIf="buttonConfig.options">
         <button mat-raised-button [matMenuTriggerFor]="More">More</button>
         <mat-menu #More="matMenu">
-        <span *ngFor="let button of buttonConfig.options">
-          <button mat-menu-item *mifosxHasPermission="button.taskPermissionName">{{button.name}}</button>
+        <span *ngFor="let option of buttonConfig.options">
+          <button mat-menu-item *mifosxHasPermission="option.taskPermissionName" (click)="doAction(option.name)">{{option.name}}</button>
         </span>
         </mat-menu>
       </ng-container>

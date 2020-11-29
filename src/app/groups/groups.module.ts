@@ -18,6 +18,20 @@ import { CreateGroupComponent } from './create-group/create-group.component';
 import { DatatableTabsComponent } from './groups-view/datatable-tabs/datatable-tabs.component';
 import { SingleRowComponent } from './groups-view/datatable-tabs/single-row/single-row.component';
 import { MultiRowComponent } from './groups-view/datatable-tabs/multi-row/multi-row.component';
+import { AddRoleComponent } from './groups-view/add-role/add-role.component';
+import { UnassignRoleDialogComponent } from './groups-view/custom-dialogs/unassign-role-dialog/unassign-role-dialog.component';
+import { GroupActionsComponent } from './groups-view/group-actions/group-actions.component';
+import { GroupAssignStaffComponent } from './groups-view/group-actions/group-assign-staff/group-assign-staff.component';
+import { UnassignStaffDialogComponent } from './groups-view/custom-dialogs/unassign-staff-dialog/unassign-staff-dialog.component';
+import { CloseGroupComponent } from './groups-view/group-actions/close-group/close-group.component';
+import { ActivateGroupComponent } from './groups-view/group-actions/activate-group/activate-group.component';
+import { EditGroupComponent } from './edit-group/edit-group.component';
+import { AttachGroupMeetingComponent } from './groups-view/group-actions/attach-group-meeting/attach-group-meeting.component';
+import { GroupAttendanceComponent } from './groups-view/group-actions/group-attendance/group-attendance.component';
+import { ManageGroupMembersComponent } from './groups-view/group-actions/manage-group-members/manage-group-members.component';
+import { EditGroupMeetingComponent } from './groups-view/group-actions/edit-group-meeting/edit-group-meeting.component';
+import { EditGroupMeetingScheduleComponent } from './groups-view/group-actions/edit-group-meeting-schedule/edit-group-meeting-schedule.component';
+import { GroupTransferClientsComponent } from './groups-view/group-actions/group-transfer-clients/group-transfer-clients.component';
 
 /**
  * Groups Module
@@ -40,7 +54,21 @@ import { MultiRowComponent } from './groups-view/datatable-tabs/multi-row/multi-
     CreateGroupComponent,
     DatatableTabsComponent,
     SingleRowComponent,
-    MultiRowComponent
+    MultiRowComponent,
+    AddRoleComponent,
+    UnassignRoleDialogComponent,
+    GroupActionsComponent,
+    GroupAssignStaffComponent,
+    UnassignStaffDialogComponent,
+    CloseGroupComponent,
+    ActivateGroupComponent,
+    EditGroupComponent,
+    AttachGroupMeetingComponent,
+    GroupAttendanceComponent,
+    ManageGroupMembersComponent,
+    EditGroupMeetingComponent,
+    EditGroupMeetingScheduleComponent,
+    GroupTransferClientsComponent
   ],
   providers: [DatePipe]
 })

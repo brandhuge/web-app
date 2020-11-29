@@ -6,6 +6,7 @@ import { DatePipe } from '@angular/common';
 
 /** Custom Services */
 import { ReportsService } from '../reports.service';
+import { SettingsService } from 'app/settings/settings.service';
 
 /** Custom Models */
 import { ReportParameter } from '../common-models/report-parameter.model';
@@ -25,20 +26,23 @@ export class RunReportComponent implements OnInit {
   minDate = new Date(2000, 0, 1);
   /** Maximum date allowed. */
   maxDate = new Date();
+
   /** Contains report specifications i.e: name, type and id */
   report: any = {};
   /** Formatted data post labeling of report parameters fetched from API */
-  paramData: any = [];
+  paramData: ReportParameter[] = [];
   /** Array of all parent parameters */
   parentParameters: any[] = [];
   /** Parameter data to configure pentaho output */
   pentahoReportParameters: any[] = [];
   /** Data to be passed on to component selectors */
   dataObject: any;
-  /** Initializes new form group 'ReportForm */
-  ReportForm = new FormGroup({});
+
+  /** Initializes new form group eportForm */
+  reportForm = new FormGroup({});
   /** Static Form control for decimal places in output */
   decimalChoice = new FormControl();
+
   /** Toggles Report form */
   isCollapsed = false;
   /** Toggles  Table output. */
@@ -51,18 +55,21 @@ export class RunReportComponent implements OnInit {
   /**
    * Fetches report specifications from route params and retrieves report parameters data from `resolve`.
    * @param {ActivatedRoute} route ActivatedRoute.
-   * @param {DomSanitizer} sanitizer DomSanitizer.
    * @param {ReportsService} reportsService ReportsService
+   * @param {SettingsService} settingsService Settings Service
    * @param {DatePipe} datePipe Date Pipe
    */
   constructor(private route: ActivatedRoute,
               private reportsService: ReportsService,
+               private settingsService: SettingsService,
               private datePipe: DatePipe) {
-    this.report.name = this.route.snapshot.params['report-name'];
-    this.report.type = this.route.snapshot.params['report-type'];
-    this.report.id = this.route.snapshot.params['report-id'];
-    this.route.data.subscribe((data: any) => {
-      this.paramData = data.params;
+    this.report.name = this.route.snapshot.params['name'];
+    this.route.queryParams.subscribe((queryParams: { type: any, id: any }) => {
+      this.report.type = queryParams.type;
+      this.report.id = queryParams.id;
+    });
+    this.route.data.subscribe((data: { reportParameters: ReportParameter[] }) => {
+      this.paramData = data.reportParameters;
     });
   }
 
@@ -79,39 +86,39 @@ export class RunReportComponent implements OnInit {
    */
   createRunReportForm() {
     this.paramData.forEach(
-      (param: any) => {
-        if (!param.parentParameterName) {
-          this.ReportForm.addControl(param.name, new FormControl('', Validators.required));
+      (param: ReportParameter) => {
+        if (!param.parentParameterName) { // Non Child Parameter
+          this.reportForm.addControl(param.name, new FormControl('', Validators.required));
           if (param.displayType === 'select') {
             this.fetchSelectOptions(param, param.name);
           }
-        } else {
+        } else { // Child Parameter
           const parent: ReportParameter = this.paramData
             .find((entry: any) => entry.name === param.parentParameterName);
-          parent.childParameter = param;
-          this.parentParameters.push(parent);
+          parent.childParameters.push(param);
+          this.updateParentParameters(parent);
         }
       });
     if (this.report.type === 'Pentaho') {
-      this.ReportForm.addControl('outputType', new FormControl(''));
+      this.reportForm.addControl('outputType', new FormControl(''));
       this.mapPentahoParams();
     }
     this.decimalChoice.patchValue('0');
     this.setChildControls();
   }
 
- /**
-  * Fetches Select Dropdown options for param type "Select".
-  * @param {ReportParameter} param Parameter for which dropdown options are required.
-  * @param {string} inputstring url substring for API call.
-  */
-  fetchSelectOptions(param: ReportParameter, inputstring: string) {
-    this.reportsService.getSelectOptions(inputstring).subscribe((options: SelectOption[]) => {
-      param.selectOptions = options;
-      if (param.selectAll === 'Y') {
-        param.selectOptions.push({id: '-1', name: 'All'});
-      }
-    });
+  /**
+   * Updates the array of parent parameters.
+   * @param {ReportParameter} parent Parent report parameter
+   */
+  updateParentParameters(parent: ReportParameter) {
+    const parentNames = this.parentParameters.map(parameter => parameter.name);
+    if (!parentNames.includes(parent.name)) { // Parent's first child.
+      this.parentParameters.push(parent);
+    } else { // Parent already has a child
+      const index = parentNames.indexOf(parent.name);
+      this.parentParameters[index] = parent;
+    }
   }
 
   /**
@@ -132,13 +139,33 @@ export class RunReportComponent implements OnInit {
    */
   setChildControls() {
     this.parentParameters.forEach((param: ReportParameter) => {
-      this.ReportForm.get(param.name).valueChanges.subscribe((option: any) => {
-        this.ReportForm.addControl(param.childParameter.name, new FormControl('', Validators.required));
-        if (param.childParameter.displayType === 'select') {
-          const inputstring = `${param.childParameter.name}?${param.inputName}=${option.id}`;
-          this.fetchSelectOptions(param.childParameter, inputstring);
-        }
+      this.reportForm.get(param.name).valueChanges.subscribe((option: any) => {
+        param.childParameters.forEach((child: ReportParameter) => {
+          if (child.displayType === 'none') {
+            this.reportForm.addControl(child.name, new FormControl(child.defaultVal));
+          } else {
+            this.reportForm.addControl(child.name, new FormControl('', Validators.required));
+          }
+          if (child.displayType === 'select') {
+            const inputstring = `${child.name}?${param.inputName}=${option.id}`;
+            this.fetchSelectOptions(child, inputstring);
+          }
+        });
       });
+    });
+  }
+
+  /**
+   * Fetches Select Dropdown options for param type "Select".
+   * @param {ReportParameter} param Parameter for which dropdown options are required.
+   * @param {string} inputstring url substring for API call.
+   */
+  fetchSelectOptions(param: ReportParameter, inputstring: string) {
+    this.reportsService.getSelectOptions(inputstring).subscribe((options: SelectOption[]) => {
+      param.selectOptions = options;
+      if (param.selectAll === 'Y') {
+        param.selectOptions.push({id: '-1', name: 'All'});
+      }
     });
   }
 
@@ -165,8 +192,11 @@ export class RunReportComponent implements OnInit {
           formattedResponse[newKey] = value['id'];
           break;
         case 'date':
-          const dateFormat = 'yyyy-MM-dd';
+          const dateFormat = this.settingsService.dateFormat;
           formattedResponse[newKey] = this.datePipe.transform(value, dateFormat);
+          break;
+        case 'none':
+          formattedResponse[newKey] = value;
           break;
       }
     }
@@ -178,10 +208,10 @@ export class RunReportComponent implements OnInit {
    */
   run() {
     this.isCollapsed = true;
-    const userResponse = this.formatUserResponse(this.ReportForm.value);
+    const userResponse = this.formatUserResponse(this.reportForm.value);
     this.dataObject = {
       formData: userResponse,
-      reportData: this.report,
+      report: this.report,
       decimalChoice: this.decimalChoice.value
     };
     switch (this.report.type) {

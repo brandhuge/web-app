@@ -16,7 +16,7 @@ export class ClientsService {
    */
   constructor(private http: HttpClient) { }
 
-  getFilteredClients(orderBy: string, sortOrder: string, orphansOnly: boolean, displayName: string, officeId: any): Observable<any> {
+  getFilteredClients(orderBy: string, sortOrder: string, orphansOnly: boolean, displayName: string, officeId?: any): Observable<any> {
     let httpParams = new HttpParams()
       .set('displayName', displayName)
       .set('orphansOnly', orphansOnly.toString())
@@ -43,6 +43,25 @@ export class ClientsService {
 
   getClientData(clientId: string) {
     return this.http.get(`/clients/${clientId}`);
+  }
+
+  createClient(client: any) {
+    return this.http.post(`/clients`, client);
+  }
+
+  updateClient(clientId: string, client: any) {
+    return this.http.put(`/clients/${clientId}`, client);
+  }
+
+  deleteClient(clientId: string) {
+    return this.http.delete(`/clients/${clientId}`);
+  }
+
+  getClientDataAndTemplate(clientId: string) {
+    const httpParams = new HttpParams()
+        .set('template', 'true')
+        .set('staffInSelectedOfficeOnly', 'true');
+    return this.http.get(`/clients/${clientId}`, { params: httpParams });
   }
 
   getClientDatatables() {
@@ -79,6 +98,11 @@ export class ClientsService {
     return this.http.get(`/clients/${clientId}/charges`, { params: httpParams });
   }
 
+  getSelectedChargeData(clientId: string, chargeId: string) {
+    const httpParams = new HttpParams().set('associations', 'all');
+    return this.http.get(`/clients/${clientId}/charges/${chargeId}`, { params: httpParams });
+  }
+
   /**
    * @param chargeData Charge Data to be waived.
    */
@@ -87,12 +111,41 @@ export class ClientsService {
     return this.http.post(`/clients/${chargeData.clientId}/charges/${chargeData.resourceType}`, chargeData, { params: httpParams });
   }
 
-  /**
-   * Get All Client Cgarges.
-   * @param clientId Client Id of the user.
-   */
   getAllClientCharges(clientId: string) {
     return this.http.get(`/clients/${clientId}/charges`);
+  }
+
+  /**
+   * @param transactionData Transaction Data to be undone.
+   */
+  undoTransaction(transactionData: any) {
+    return this.http.post(`/clients/${transactionData.clientId}/transactions/${transactionData.transactionId}?command=undo`, transactionData);
+  }
+
+  /**
+   * @param clientId Client Id of the relevant charge.
+   * @param chargeId Charge Id to be deleted.
+   */
+  deleteCharge(clientId: string, chargeId: string) {
+    return this.http.delete(`/clients/${clientId}/charges/${chargeId}?associations=all`);
+  }
+
+  /*
+   * @param clientId Client Id of payer.
+   * @param chargeId Charge Id of the charge to be paid.
+   */
+  getClientTransactionPay(clientId: string, chargeId: string) {
+    return this.http.get(`/clients/${clientId}/charges/${chargeId}`);
+  }
+
+  /**
+   * @param clientId Client Id of the payment.
+   * @param chargeId Charge Id of the payment.
+   * @param payment  Client Payment data.
+   */
+  payClientCharge(clientId: string, chargeId: string, payment: any) {
+    const httpParams = new HttpParams().set('command', 'paycharge');
+    return this.http.post(`/clients/${clientId}/charges/${chargeId}?command=paycharge`, payment, { params: httpParams });
   }
 
   getClientSummary(clientId: string) {
@@ -104,6 +157,33 @@ export class ClientsService {
   getClientProfileImage(clientId: string) {
     const httpParams = new HttpParams().set('maxHeight', '150');
     return this.http.skipErrorHandler().get(`/clients/${clientId}/images`, { params: httpParams, responseType: 'text' });
+  }
+
+  uploadClientProfileImage(clientId: string, image: File) {
+    const formData = new FormData();
+    formData.append('file', image);
+    formData.append('filename', 'file');
+    return this.http.post(`/clients/${clientId}/images`, formData);
+  }
+
+  uploadCapturedClientProfileImage(clientId: string, imageURL: string) {
+    return this.http.post(`/clients/${clientId}/images`, imageURL);
+  }
+
+  deleteClientProfileImage(clientId: string) {
+    return this.http.delete(`/clients/${clientId}/images`);
+  }
+
+  uploadClientSignatureImage(clientId: string, signature: File) {
+    const formData = new FormData();
+    formData.append('file', signature);
+    formData.append('filename', signature.name);
+    return this.http.post(`/clients/${clientId}/images`, formData);
+  }
+
+  getClientSignatureImage(clientId: string, documentId: string) {
+    const httpParams = new HttpParams().set('tenantIdentifier', 'default');
+    return this.http.get(`/clients/${clientId}/documents/${documentId}/attachment`, { params: httpParams, responseType: 'blob' });
   }
 
   getClientFamilyMembers(clientId: string) {
@@ -205,4 +285,82 @@ export class ClientsService {
   editClientAddress(clientId: string, addressTypeId: string, addressData: any) {
     return this.http.put(`/client/${clientId}/addresses?type=${addressTypeId}`, addressData);
   }
+
+  executeClientCommand(clientId: string, command: string, data: any): Observable<any> {
+    const httpParams = new HttpParams().set('command', command);
+    return this.http.post(`/clients/${clientId}`, data, { params: httpParams });
+  }
+
+  getClientCommandTemplate(command: string): Observable<any> {
+    const httpParams = new HttpParams().set('commandParam', command);
+    return this.http.get(`/clients/template`, { params: httpParams });
+  }
+
+  getClientTransferProposalDate(clientId: any): Observable<any> {
+    return this.http.get(`/clients/${clientId}/transferproposaldate`);
+  }
+
+  getClientChargeTemplate(clientId: any): Observable<any> {
+    return this.http.get(`/clients/${clientId}/charges/template`);
+  }
+
+  getChargeAndTemplate(chargeId: any): Observable<any> {
+    const httpParams = new HttpParams().set('template', 'true');
+    return this.http.get(`/charges/${chargeId}`, { params: httpParams });
+  }
+
+  createClientCharge(clientId: any, charge: any) {
+    return this.http.post(`/clients/${clientId}/charges`, charge);
+  }
+
+  getClientReportTemplates() {
+    const httpParams = new HttpParams()
+          .set('entityId', '0')
+          .set('typeId', '0');
+    return this.http.get('/templates', { params: httpParams });
+  }
+
+  retrieveClientReportTemplate(templateId: string, clientId: string) {
+    const httpParams = new HttpParams().set('clientId', clientId);
+    return this.http.post(`/templates/${templateId}`, {}, { params: httpParams, responseType: 'text' });
+  }
+
+  /**
+   * @returns {Observable<any>} Offices data
+   */
+  getOffices(): Observable<any> {
+    return this.http.get('/offices');
+  }
+
+  /**
+   * returns the list of survey data of the particular Client
+   * @param clientId
+   */
+  getSurveys(clientId: string) {
+    return this.http.get(`/surveys/scorecards/clients/${clientId}`);
+  }
+
+  /**
+   * returns the list of survey types and questions
+   */
+  getAllSurveysType() {
+    return this.http.get('/surveys');
+  }
+
+  /**
+   * returns the response from the post request for that survey
+   * @param surveyId
+   * @param surveyData Survey Data submitted by client
+   */
+  createNewSurvey(surveyId: Number, surveyData: any) {
+    return this.http.post(`/surveys/scorecards/${surveyId}`, surveyData);
+  }
+
+  /**
+   * @param userData User Data.
+   */
+  createSelfServiceUser(userData: any) {
+    return this.http.post(`/users`, userData);
+  }
+
 }

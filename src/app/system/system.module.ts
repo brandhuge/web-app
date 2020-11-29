@@ -5,6 +5,7 @@ import { NgModule } from '@angular/core';
 import { SharedModule } from '../shared/shared.module';
 import { SystemRoutingModule } from './system-routing.module';
 import { PipesModule } from '../pipes/pipes.module';
+import { DirectivesModule } from '../directives/directives.module';
 
 /** Component Imports */
 import { CodesComponent } from './codes/codes.component';
@@ -19,6 +20,8 @@ import { ManageHooksComponent } from './manage-hooks/manage-hooks.component';
 import { RolesAndPermissionsComponent } from './roles-and-permissions/roles-and-permissions.component';
 import { AddRoleComponent } from './roles-and-permissions/add-role/add-role.component';
 import { ManageSurveysComponent } from './manage-surveys/manage-surveys.component';
+import { ViewSurveyComponent } from './manage-surveys/view-survey/view-survey.component';
+import { CreateSurveyComponent } from './manage-surveys/create-survey/create-survey.component';
 import { ManageSchedulerJobsComponent } from './manage-scheduler-jobs/manage-scheduler-jobs.component';
 import { GlobalConfigurationsComponent } from './global-configurations/global-configurations.component';
 import { EditConfigurationComponent } from './global-configurations/edit-configuration/edit-configuration.component';
@@ -42,10 +45,11 @@ import { CreateReportComponent } from './manage-reports/create-report/create-rep
 import { EditReportComponent } from './manage-reports/edit-report/edit-report.component';
 import { AuditTrailsComponent } from './audit-trails/audit-trails.component';
 import { ViewAuditComponent } from './audit-trails/view-audit/view-audit.component';
+import { ColumnDialogComponent } from './manage-data-tables/column-dialog/column-dialog.component';
+import { ViewHistorySchedulerJobComponent } from './manage-scheduler-jobs/view-history-scheduler-job/view-history-scheduler-job.component';
 import { EditHookComponent } from './manage-hooks/edit-hook/edit-hook.component';
 import { ViewHookComponent } from './manage-hooks/view-hook/view-hook.component';
 import { CreateHookComponent } from './manage-hooks/create-hook/create-hook.component';
-import { ColumnDialogComponent } from './manage-data-tables/column-dialog/column-dialog.component';
 import { ViewRoleComponent } from './roles-and-permissions/view-role/view-role.component';
 import { EditRoleComponent } from './roles-and-permissions/edit-role/edit-role.component';
 import { EntityToEntityMappingComponent } from './entity-to-entity-mapping/entity-to-entity-mapping.component';
@@ -55,12 +59,14 @@ import { ReportParameterDialogComponent } from './manage-reports/report-paramete
 import { AddEventDialogComponent } from './manage-hooks/add-event-dialog/add-event-dialog.component';
 import { ViewSchedulerJobComponent } from './manage-scheduler-jobs/view-scheduler-job/view-scheduler-job.component';
 import { EditSchedulerJobComponent } from './manage-scheduler-jobs/edit-scheduler-job/edit-scheduler-job.component';
+import { ConfigureMakerCheckerTasksComponent } from './configure-maker-checker-tasks/configure-maker-checker-tasks.component';
 
 @NgModule({
   imports: [
     SystemRoutingModule,
     SharedModule,
-    PipesModule
+    PipesModule,
+    DirectivesModule
   ],
   declarations: [
     SystemComponent,
@@ -108,12 +114,12 @@ import { EditSchedulerJobComponent } from './manage-scheduler-jobs/edit-schedule
     EditSchedulerJobComponent,
     ViewRoleComponent,
     EditRoleComponent,
-    EntityToEntityMappingComponent
+    EntityToEntityMappingComponent,
+    ConfigureMakerCheckerTasksComponent,
+    CreateSurveyComponent,
+    EditSchedulerJobComponent,
+    ViewHistorySchedulerJobComponent,
+    ViewSurveyComponent
   ],
-  entryComponents: [
-    ReportParameterDialogComponent,
-    AddEventDialogComponent,
-    ColumnDialogComponent
-  ]
 })
 export class SystemModule { }

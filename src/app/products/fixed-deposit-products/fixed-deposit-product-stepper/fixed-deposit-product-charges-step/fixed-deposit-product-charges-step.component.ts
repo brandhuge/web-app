@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { FormControl } from '@angular/forms';
 
 import { DeleteDialogComponent } from 'app/shared/delete-dialog/delete-dialog.component';
@@ -24,9 +24,11 @@ export class FixedDepositProductChargesStepComponent implements OnInit {
 
   ngOnInit() {
     this.chargeData = this.fixedDepositProductsTemplate.chargeOptions;
-
-    this.chargesDataSource = [];
-
+    if (!(this.fixedDepositProductsTemplate === undefined) && this.fixedDepositProductsTemplate.id) {
+      this.chargesDataSource = this.fixedDepositProductsTemplate.charges;
+    } else {
+      this.chargesDataSource = [];
+    }
     this.currencyCode.valueChanges.subscribe(() => this.chargesDataSource = []);
   }
 

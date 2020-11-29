@@ -33,41 +33,75 @@ import { HolidaysComponent } from './holidays/holidays.component';
 import { EditEmployeeComponent } from './employees/edit-employee/edit-employee.component';
 import { CreateTellerComponent } from './tellers/create-teller/create-teller.component';
 import { EditTellerComponent } from './tellers/edit-teller/edit-teller.component';
-import { ViewCashierComponent } from './tellers/view-cashier/view-cashier.component';
+import { ViewCashierComponent } from './tellers/cashiers/view-cashier/view-cashier.component';
 import { ViewHolidaysComponent } from './holidays/view-holidays/view-holidays.component';
 import { ViewOfficeComponent } from './offices/view-office/view-office.component';
 import { GeneralTabComponent } from './offices/view-office/general-tab/general-tab.component';
 import { DatatableTabsComponent } from './offices/view-office/datatable-tabs/datatable-tabs.component';
 import { ViewCampaignComponent } from './sms-campaigns/view-campaign/view-campaign.component';
+import { ManageFundsComponent } from './manage-funds/manage-funds.component';
+import { ManageCurrenciesComponent } from './currencies/manage-currencies/manage-currencies.component';
+import { CashiersComponent } from './tellers/cashiers/cashiers.component';
+import { TransactionsComponent } from './tellers/cashiers/transactions/transactions.component';
+import { AllocateCashComponent } from './tellers/cashiers/allocate-cash/allocate-cash.component';
+import { SettleCashComponent } from './tellers/cashiers/settle-cash/settle-cash.component';
+import { EditCashierComponent } from './tellers/cashiers/edit-cashier/edit-cashier.component';
+import { CreateCashierComponent } from './tellers/cashiers/create-cashier/create-cashier.component';
+import { EditHolidayComponent } from './holidays/edit-holiday/edit-holiday.component';
+import { EditAdhocQueryComponent } from './adhoc-query/edit-adhoc-query/edit-adhoc-query.component';
+import { EditOfficeComponent } from './offices/edit-office/edit-office.component';
+import { BulkImportComponent } from './bulk-import/bulk-import.component';
+import { ViewBulkImportComponent } from './bulk-import/view-bulk-import/view-bulk-import.component';
+import { ViewLoanProvisioningCriteriaComponent } from './loan-provisioning-criteria/view-loan-provisioning-criteria/view-loan-provisioning-criteria.component';
+import { CreateCampaignComponent } from './sms-campaigns/create-campaign/create-campaign.component';
+import { EditCampaignComponent } from './sms-campaigns/edit-campaign/edit-campaign.component';
+import { CreateEnityDataTableChecksComponent } from './entity-data-table-checks/create-enity-data-table-checks/create-enity-data-table-checks.component';
+import { CreateLoanProvisioningCriteriaComponent } from './loan-provisioning-criteria/create-loan-provisioning-criteria/create-loan-provisioning-criteria.component';
+import { BulkLoanReassignmnetComponent } from './bulk-loan-reassignmnet/bulk-loan-reassignmnet.component';
+import { EditLoanProvisioningCriteriaComponent } from './loan-provisioning-criteria/edit-loan-provisioning-criteria/edit-loan-provisioning-criteria.component';
+import { StandingInstructionsHistoryComponent } from './standing-instructions-history/standing-instructions-history.component';
+import { FundMappingComponent } from './fund-mapping/fund-mapping.component';
+import { CreateHolidayComponent } from './holidays/create-holiday/create-holiday.component';
 
 /** Custom Resolvers */
-import { LoanProvisioningCriteriaResolver } from './loan-provisioning-criteria/loan-provisioning-criteria.resolver';
+import { LoanProvisioningCriteriaResolver } from './loan-provisioning-criteria/common-resolvers/loan-provisioning-criteria.resolver';
 import { OfficesResolver } from './offices/common-resolvers/offices.resolver';
 import { EmployeesResolver } from './employees/employees.resolver';
 import { EmployeeResolver } from './employees/employee.resolver';
 import { EditEmployeeResolver } from './employees/edit-employee.resolver';
 import { CurrenciesResolver } from './currencies/currencies.resolver';
 import { SmsCampaignsResolver } from './sms-campaigns/common-resolvers/sms-campaigns.resolver';
-import { AdhocQueriesResolver } from './adhoc-query/adhoc-queries.resolver';
-import { AdhocQueryResolver } from './adhoc-query/adhoc-query.resolver';
-import { TellersResolver } from './tellers/tellers.resolver';
-import { TellerResolver } from './tellers/teller.resolver';
+import { AdhocQueriesResolver } from './adhoc-query/common-resolvers/adhoc-queries.resolver';
+import { AdhocQueryResolver } from './adhoc-query/common-resolvers/adhoc-query.resolver';
+import { TellersResolver } from './tellers/common-resolvers/tellers.resolver';
+import { TellerResolver } from './tellers/common-resolvers/teller.resolver';
 import { PaymentTypesResolver } from './payment-types/payment-types.resolver';
 import { PaymentTypeResolver } from './payment-types/payment-type.resolver';
 import { PasswordPreferencesTemplateResolver } from './password-preferences/password-preferences-template.resolver';
 import { EntityDataTableChecksResolver } from './entity-data-table-checks/entity-data-table-checks.resolver';
 import { WorkingDaysResolver } from './working-days/working-days.resolver';
 import { EditOfficeResolver } from './offices/common-resolvers/edit-office.resolver';
-import { EditOfficeComponent } from './offices/edit-office/edit-office.component';
 import { AdhocQueryTemplateResolver } from './adhoc-query/adhoc-query-template.resolver';
-import { ViewLoanProvisioningCriteriaComponent } from './loan-provisioning-criteria/view-loan-provisioning-criteria/view-loan-provisioning-criteria.component';
-import { LoanProvisioningCriteriasResolver } from './loan-provisioning-criteria/loan-provisioning-criterias.resolver';
-import { CashierResolver } from './tellers/cashier.resolver';
+import { LoanProvisioningCriteriasResolver } from './loan-provisioning-criteria/common-resolvers/loan-provisioning-criterias.resolver';
+import { CashierResolver } from './tellers/common-resolvers/cashier.resolver';
+import { CashiersResolver } from './tellers/common-resolvers/cashiers.resolver';
 import { HolidayResolver } from './holidays/holiday.resolver';
 import { OfficeResolver } from './offices/common-resolvers/office.resolver';
 import { OfficeDatatableResolver } from './offices/common-resolvers/office-datatable.resolver';
 import { OfficeDatatablesResolver } from './offices/common-resolvers/office-datatables.resolver';
 import { SmsCampaignResolver } from './sms-campaigns/common-resolvers/sms-campaign.resolver';
+import { ManageFundsResolver } from './manage-funds/manage-funds.resolver';
+import { CashierTransactionTemplateResolver } from './tellers/common-resolvers/teller-transaction-template.resolver';
+import { EditCashierResolver } from './tellers/common-resolvers/edit-cashier.resolver';
+import { HolidayTemplateResolver } from './holidays/holiday-template.resolver';
+import { AdhocQueryAndTemplateResolver } from './adhoc-query/common-resolvers/adhoc-query-and-template.resolver';
+import { BulkImportResolver } from './bulk-import/bulk-import.resolver';
+import { SmsCampaignTemplateResolver } from './sms-campaigns/common-resolvers/sms-campaign-template.resolver';
+import { EntityDataTableChecksTemplateResolver } from './entity-data-table-checks/enitity-data-table-checks-template.resolver';
+import { LoanProvisioningCriteriaTemplateResolver } from './loan-provisioning-criteria/common-resolvers/loan-provisioning-criteria-template.resolver';
+import { LoanProvisioningCriteriaAndTemplateResolver } from './loan-provisioning-criteria/common-resolvers/loan-provisioning-criteria-and-template.resolver';
+import { StandingInstructionsTemplateResolver } from './standing-instructions-history/standing-instructions-template.resolver';
+import { AdvanceSearchTemplateResolver } from './fund-mapping/advance-search-template.resolver';
 
 /** Organization Routes */
 const routes: Routes = [
@@ -91,7 +125,14 @@ const routes: Routes = [
                 loanProvisioningCriterias: LoanProvisioningCriteriasResolver
               }
             },
-
+            {
+              path: 'create',
+              data: { title: extract('Create Provisioning Criteria'), breadcrumb: 'Create Provisioning Criteria' },
+              component: CreateLoanProvisioningCriteriaComponent,
+              resolve: {
+                loanProvisioningCriteriaTemplate: LoanProvisioningCriteriaTemplateResolver,
+              }
+            },
             {
               path: ':id',
               data: { title: extract('View Provisioning Criteria'), routeParamBreadcrumb: 'id' },
@@ -103,6 +144,14 @@ const routes: Routes = [
                     loanProvisioningCriteria: LoanProvisioningCriteriaResolver
                   }
                 },
+                {
+                  path: 'edit',
+                  component: EditLoanProvisioningCriteriaComponent,
+                  data: { title: extract('Edit Provisioning Criteria'), breadcrumb: 'Edit', routeParamBreadcrumb: false },
+                  resolve: {
+                    loanProvisioningCriteriaAndTemplate: LoanProvisioningCriteriaAndTemplateResolver
+                  }
+                }
               ]
             }
           ],
@@ -216,11 +265,21 @@ const routes: Routes = [
         },
         {
           path: 'currencies',
-          component: CurrenciesComponent,
           data: { title: extract('Currency Configuration'), breadcrumb: 'Currency Configuration' },
           resolve: {
             currencies: CurrenciesResolver
-          }
+          },
+          children: [
+            {
+              path: '',
+              component: CurrenciesComponent,
+            },
+            {
+              path: 'manage',
+              data: { title: extract('Manage Currencies'), breadcrumb: 'Manage Currencies' },
+              component: ManageCurrenciesComponent
+            }
+          ]
         },
         {
           path: 'sms-campaigns',
@@ -234,14 +293,52 @@ const routes: Routes = [
               }
             },
             {
+              path: 'create',
+              data: { title: extract('Create SMS Campaign'), breadcrumb: 'Create Campaign' },
+              component: CreateCampaignComponent,
+              resolve: {
+                smsCampaignTemplate: SmsCampaignTemplateResolver
+              }
+            },
+            {
               path: ':id',
-              component: ViewCampaignComponent,
               data: { title: extract('View SMS Campaign'), routeResolveBreadcrumb: ['smsCampaign', 'campaignName'] },
               resolve: {
                 smsCampaign: SmsCampaignResolver
-              }
+              },
+              runGuardsAndResolvers: 'always',
+              children: [
+                {
+                  path: '',
+                  component: ViewCampaignComponent,
+                },
+                {
+                  path: 'edit',
+                  component: EditCampaignComponent,
+                  data: { title: extract('Edit SMS Campaign'), breadcrumb: 'Edit', routeResolveBreadcrumb: false},
+                  resolve: {
+                    smsCampaignTemplate: SmsCampaignTemplateResolver,
+                  }
+                }
+              ]
             }
           ]
+        },
+        {
+          path: 'standing-instructions-history',
+          component: StandingInstructionsHistoryComponent,
+          data: { title: extract('Standing Instructions History'), breadcrumb: 'Standing Instructions History' },
+          resolve: {
+            standingInstructionsTemplate: StandingInstructionsTemplateResolver
+          }
+        },
+        {
+          path: 'fund-mapping',
+          component: FundMappingComponent,
+          data: { title: extract('Advance Search'), breadcrumb: 'Advance Search' },
+          resolve: {
+            advanceSearchTemplate: AdvanceSearchTemplateResolver
+          }
         },
         {
           path: 'adhoc-query',
@@ -264,11 +361,24 @@ const routes: Routes = [
             },
             {
               path: ':id',
-              component: ViewAdhocQueryComponent,
-              data: { title: extract('View Adhoc Query'), routeResolveBreadcrumb: ['adhocQuery', 'name']},
-              resolve: {
-                adhocQuery: AdhocQueryResolver
-              }
+              data: { title: extract('View Adhoc Query'), routeParamBreadcrumb: 'id' },
+              children: [
+                {
+                  path: '',
+                  component: ViewAdhocQueryComponent,
+                  resolve: {
+                    adhocQuery: AdhocQueryResolver
+                  },
+                },
+                {
+                  path: 'edit',
+                  component: EditAdhocQueryComponent,
+                  data: { title: extract('Edit Adhoc Query'), breadcrumb: 'Edit', routeParamBreadcrumb: false },
+                  resolve: {
+                    adhocQueryAndTemplate: AdhocQueryAndTemplateResolver
+                  }
+                }
+              ]
             }
           ]
         },
@@ -313,15 +423,69 @@ const routes: Routes = [
                 },
                 {
                   path: 'cashiers',
-                  data: { title: extract('View Cashiers'), breadcrumb: 'View Cashiers', routeParamBreadcrumb: false },
+                  data: { title: extract('Cashiers'), breadcrumb: 'Cashiers', routeParamBreadcrumb: false },
                   children: [
                     {
-                      path: ':id',
-                      component: ViewCashierComponent,
-                      data: { title: extract('View Cashier'), breadcrumb: 'View Cashier', routeParamBreadcrumb: 'id' },
+                      path: '',
+                      component: CashiersComponent,
                       resolve: {
-                        cashier: CashierResolver
+                        cashiersData: CashiersResolver
                       }
+                    },
+                    {
+                      path: 'create',
+                      data: { title: extract('Cashiers'), breadcrumb: 'Create Cashier' },
+                      component: CreateCashierComponent,
+                      resolve: {
+                        cashierTemplate: EditCashierResolver
+                      }
+                    },
+                    {
+                      path: ':id',
+                      data: { title: extract('View Cashier'),  routeParamBreadcrumb: 'id' },
+                      children: [
+                        {
+                          path: '',
+                          component: ViewCashierComponent,
+                          data: { title: extract('View Cashier'), breadcrumb: 'View Cashier', routeParamBreadcrumb: false },
+                          resolve: {
+                            cashier: CashierResolver
+                          }
+                        },
+                        {
+                          path: 'edit',
+                          component: EditCashierComponent,
+                          data: { title: extract('Edit Cashier'), breadcrumb: 'Edit', routeParamBreadcrumb: false },
+                          resolve: {
+                            cashier: CashierResolver,
+                            cashierTemplate: EditCashierResolver
+                          }
+                        },
+                        {
+                          path: 'transactions',
+                          data: { title: extract('Cashier Transactions'), breadcrumb: 'Transactions', routeParamBreadcrumb: false },
+                          component: TransactionsComponent,
+                          resolve: {
+                            currencies: CurrenciesResolver
+                          }
+                        },
+                        {
+                          path: 'settle',
+                          component: SettleCashComponent,
+                          data: { title: extract('Settle Cash'), breadcrumb: 'Settle Cash', routeParamBreadcrumb: false },
+                          resolve: {
+                            cashierTemplate: CashierTransactionTemplateResolver
+                          }
+                        },
+                        {
+                          path: 'allocate',
+                          component: AllocateCashComponent,
+                          data: { title: extract('Allocate Cash'), breadcrumb: 'Allocate Cash', routeParamBreadcrumb: false },
+                          resolve: {
+                            cashierTemplate: CashierTransactionTemplateResolver
+                          }
+                        }
+                      ]
                     }
                   ]
                 }
@@ -370,12 +534,33 @@ const routes: Routes = [
           }
         },
         {
-          path: 'entity-data-table-checks',
-          component: EntityDataTableChecksComponent,
-          data: { title: extract('Entity Data Table Checks'), breadcrumb: 'Entity Data Table Checks' },
+          path: 'bulkloan',
+          component: BulkLoanReassignmnetComponent,
+          data: { title: extract('Bulk Loan Reassignment'), breadcrumb: 'Bulk Loan Reasssignment' },
           resolve: {
-            entityDataTableChecks: EntityDataTableChecksResolver
+            offices: OfficesResolver
           }
+        },
+        {
+          path: 'entity-data-table-checks',
+          data: { title: extract('Entity Data Table Checks'), breadcrumb: 'Entity Data Table Checks' },
+          children: [
+            {
+              path: '',
+              component: EntityDataTableChecksComponent,
+              resolve: {
+                entityDataTableChecks: EntityDataTableChecksResolver
+              },
+            },
+            {
+              path: 'create',
+              component: CreateEnityDataTableChecksComponent,
+              data: { title: extract('Create Entity Data Table Checks'), breadcrumb: 'Create' },
+              resolve: {
+                dataTableEntity: EntityDataTableChecksTemplateResolver
+              }
+            }
+          ]
         },
         {
           path: 'working-days',
@@ -386,8 +571,31 @@ const routes: Routes = [
           }
         },
         {
+          path: 'manage-funds',
+          component: ManageFundsComponent,
+          data: { title: extract('Manage Funds Days'), breadcrumb: 'Manage Funds' },
+          resolve: {
+            funds: ManageFundsResolver
+          }
+        },
+        {
           path: 'bulk-import',
-          loadChildren: '../bulk-import/bulk-import.module#BulkImportModule'
+          data: { title: extract('Bulk Import'), breadcrumb: 'Bulk Import' },
+          children: [
+            {
+              path: '',
+              component: BulkImportComponent,
+            },
+            {
+              path: ':import-name',
+              component: ViewBulkImportComponent,
+              data: { title: extract('View Bulk Import'), routeParamBreadcrumb: 'import-name' },
+              resolve: {
+                offices: OfficesResolver,
+                imports: BulkImportResolver
+              }
+            }
+          ]
         },
         {
           path: 'holidays',
@@ -401,6 +609,15 @@ const routes: Routes = [
               }
             },
             {
+              path: 'create',
+              component: CreateHolidayComponent,
+              data: { title: extract('Create Holiday'), breadcrumb: 'Create' },
+              resolve: {
+                offices: OfficesResolver,
+                holidayTemplate: HolidayTemplateResolver
+              }
+            },
+            {
               path: ':id',
               data: { title: extract('View Holidays'), routeParamBreadcrumb: 'id' },
               children: [
@@ -409,6 +626,15 @@ const routes: Routes = [
                   component: ViewHolidaysComponent,
                   resolve: {
                     holidays: HolidayResolver
+                  }
+                },
+                {
+                  path: 'edit',
+                  component: EditHolidayComponent,
+                  data: { title: extract('Edit Holidays'), breadcrumb: 'Edit', routeParamBreadcrumb: false },
+                  resolve: {
+                    holiday: HolidayResolver,
+                    holidayTemplate: HolidayTemplateResolver
                   }
                 }
               ]
@@ -437,6 +663,7 @@ const routes: Routes = [
     CurrenciesResolver,
     SmsCampaignsResolver,
     SmsCampaignResolver,
+    SmsCampaignTemplateResolver,
     AdhocQueriesResolver,
     AdhocQueryResolver,
     TellersResolver,
@@ -448,12 +675,27 @@ const routes: Routes = [
     WorkingDaysResolver,
     EditOfficeResolver,
     AdhocQueryTemplateResolver,
+    AdhocQueryAndTemplateResolver,
     LoanProvisioningCriteriasResolver,
     CashierResolver,
+    CashiersResolver,
     HolidayResolver,
     OfficeResolver,
     OfficeDatatableResolver,
-    OfficeDatatablesResolver
+    OfficeDatatablesResolver,
+    ManageFundsResolver,
+    CashierTransactionTemplateResolver,
+    EditCashierResolver,
+    HolidayResolver,
+    HolidayTemplateResolver,
+    BulkImportResolver,
+    HolidayResolver,
+    EntityDataTableChecksTemplateResolver,
+    LoanProvisioningCriteriasResolver,
+    LoanProvisioningCriteriaTemplateResolver,
+    LoanProvisioningCriteriaAndTemplateResolver,
+    StandingInstructionsTemplateResolver,
+    AdvanceSearchTemplateResolver
   ]
 })
 export class OrganizationRoutingModule { }

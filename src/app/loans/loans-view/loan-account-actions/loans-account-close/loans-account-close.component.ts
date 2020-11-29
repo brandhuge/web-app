@@ -1,9 +1,12 @@
 /** Angular Imports */
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LoansService } from 'app/loans/loans.service';
 import { DatePipe } from '@angular/common';
+
+/** Custom Services */
+import { SettingsService } from 'app/settings/settings.service';
 
 @Component({
   selector: 'mifosx-loans-account-close',
@@ -11,6 +14,8 @@ import { DatePipe } from '@angular/common';
   styleUrls: ['./loans-account-close.component.scss']
 })
 export class LoansAccountCloseComponent implements OnInit {
+
+  @Input() dataObject: any;
 
   /** Close form. */
   closeLoanForm: FormGroup;
@@ -26,12 +31,14 @@ export class LoansAccountCloseComponent implements OnInit {
    * @param {LoansService} systemService Loan Service.
    * @param {ActivatedRoute} route Activated Route.
    * @param {Router} router Router for navigation.
+   * @param {SettingsService} settingsService Settings Service
    */
   constructor(private formBuilder: FormBuilder,
     private loanService: LoansService,
     private route: ActivatedRoute,
     private router: Router,
-    private datePipe: DatePipe) {
+    private datePipe: DatePipe,
+    private settingsService: SettingsService) {
       this.loanId = this.route.parent.snapshot.params['loanId'];
     }
 
@@ -47,7 +54,7 @@ export class LoansAccountCloseComponent implements OnInit {
    */
   createCloseForm() {
     this.closeLoanForm = this.formBuilder.group({
-      'transactionDate': [new Date(), Validators.required],
+      'transactionDate': [new Date(this.dataObject.date) || new Date(), Validators.required],
       'note': []
     });
   }
@@ -58,16 +65,16 @@ export class LoansAccountCloseComponent implements OnInit {
    */
   submit() {
     const transactionDate = this.closeLoanForm.value.transactionDate;
-    const dateFormat = 'yyyy-MM-dd';
+    const dateFormat = this.settingsService.dateFormat;
     this.closeLoanForm.patchValue({
       transactionDate: this.datePipe.transform(transactionDate, dateFormat)
     });
     const closeForm = this.closeLoanForm.value;
-    closeForm.locale = 'en';
+    closeForm.locale = this.settingsService.language.code;
     closeForm.dateFormat = dateFormat;
     this.loanService.submitLoanActionButton(this.loanId, closeForm, 'close')
       .subscribe((response: any) => {
-        this.router.navigate(['../general'], { relativeTo: this.route });
+        this.router.navigate(['../../general'], { relativeTo: this.route });
     });
   }
 

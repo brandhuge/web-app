@@ -2,7 +2,7 @@
 import { Component, OnChanges, OnInit, Input, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatTable } from '@angular/material/table';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { DatePipe } from '@angular/common';
 
 /** Custom Dialogs */
@@ -18,6 +18,7 @@ import { DatepickerBase } from 'app/shared/form-dialog/formfield/model/datepicke
 
 /** Custom Services */
 import { GroupsService } from '../../../groups.service';
+import { SettingsService } from 'app/settings/settings.service';
 
 /**
  * Group Multi Row Data Tables
@@ -44,7 +45,7 @@ export class MultiRowComponent implements OnInit, OnChanges {
   showDeleteBotton: boolean;
 
   /** Data Table Reference */
-  @ViewChild('dataTable') dataTableRef: MatTable<Element>;
+  @ViewChild('dataTable', { static: true }) dataTableRef: MatTable<Element>;
 
   /**
    * Fetches group Id from parent route params.
@@ -52,11 +53,13 @@ export class MultiRowComponent implements OnInit, OnChanges {
    * @param {DatePipe} datePipe Date Pipe.
    * @param {GroupsService} groupsService Groups Service.
    * @param {MatDialog} dialog Mat Dialog.
+   * @param {SettingsService} settingsService SettingsService
    */
   constructor(private route: ActivatedRoute,
               private datePipe: DatePipe,
               private groupsService: GroupsService,
-              private dialog: MatDialog) {
+              private dialog: MatDialog,
+              private settingsService: SettingsService) {
     this.groupId = this.route.parent.parent.snapshot.paramMap.get('groupId');
   }
 
@@ -85,7 +88,7 @@ export class MultiRowComponent implements OnInit, OnChanges {
    * Adds a new row to the given multi row data table.
    */
   add() {
-    let dataTableEntryObject: any = { locale: 'en' };
+    let dataTableEntryObject: any = { locale: this.settingsService.language.code };
     const dateTransformColumns: string[] = [];
     const columns = this.dataObject.columnHeaders.filter((column: any) => {
       return ((column.columnName !== 'id') && (column.columnName !== 'group_id'));

@@ -214,6 +214,23 @@ export class SystemService {
   }
 
   /**
+   * @param {any} survey Survey to be created.
+   * @returns {Observable<any>}
+   */
+  createSurvey(survey: any): Observable<any> {
+    return this.http.post('/surveys', survey);
+  }
+
+  /**
+   * @param {string} reportId Survey ID.
+   * @returns {Observable<any>} Survey.
+   */
+  getSurvey(surveyId: string): Observable<any> {
+    return this.http.get(`/surveys/${surveyId}?template=true`);
+  }
+
+
+  /**
    * @returns {Observable<any>} Fetches Jobs.
    */
   getJobs(): Observable<any> {
@@ -242,6 +259,14 @@ export class SystemService {
    */
   updateScheduler(jobId: string, job: any): Observable<any> {
     return this.http.put(`/jobs/${jobId}`, job);
+  }
+
+  /*
+   * @param jobId Job Id to view the history.
+   * @returns {Observable<any>} Fetches History of the Job.
+   */
+  getHistoryScheduler(jobId: string): Observable<any> {
+    return this.http.get(`/jobs/${jobId}/runhistory`);
   }
 
   /**
@@ -539,6 +564,25 @@ export class SystemService {
    */
   getCharges(): Observable<any> {
     return this.http.get('/charges');
+  }
+
+  /**
+   * @returns {Observable<any>}
+   */
+  getMakerCheckerPermissions(): Observable<any> {
+    const httpParams = new HttpParams()
+                      .set('makerCheckerable', 'true');
+    return this.http.get('/permissions', {params: httpParams});
+  }
+
+  /**
+   * @param data Maker Checker data
+   * @returns {Observable<any>}
+   */
+  updateMakerCheckerPermission(data: any): Observable<any> {
+    const httpParams = new HttpParams()
+                      .set('makerCheckerable', 'true');
+    return this.http.put('/permissions', data, { params: httpParams });
   }
 
 

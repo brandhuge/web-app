@@ -1,6 +1,8 @@
 /** Angular Imports */
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
-import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 
 /** Custom Pipes */
 import { AccountsFilterPipe } from '../../pipes/accounts-filter.pipe';
@@ -22,14 +24,14 @@ export class ShareAccountTableComponent implements OnInit {
   accountData: any;
 
   /** Paginator for share account table. */
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   /** Sorter for share account table. */
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   /** Share Account Setter */
   @Input() set shareAccountData(data: any) {
     this.accountData = data;
-    const filteredAccountData = this.accountsFilterPipe.transform(data, 'share', this.showClosed ? 'closed' : 'open');
+    const filteredAccountData = this.accountsFilterPipe.transform(data, 'share', this.showClosed ? 'closed' : 'open', 'isShare');
     this.dataSource = new MatTableDataSource(filteredAccountData);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
@@ -56,7 +58,7 @@ export class ShareAccountTableComponent implements OnInit {
    */
   toggleClosed() {
     this.showClosed = !this.showClosed;
-    const filteredAccountData = this.accountsFilterPipe.transform(this.accountData, 'share', this.showClosed ? 'closed' : 'open');
+    const filteredAccountData = this.accountsFilterPipe.transform(this.accountData, 'share', this.showClosed ? 'closed' : 'open', 'isShare');
     this.dataSource = new MatTableDataSource(filteredAccountData);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;

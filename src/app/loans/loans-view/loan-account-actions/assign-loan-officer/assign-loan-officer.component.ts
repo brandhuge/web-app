@@ -1,9 +1,12 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { LoansService } from 'app/loans/loans.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+
+/** Custom Services */
+import { SettingsService } from 'app/settings/settings.service';
 
 @Component({
   selector: 'mifosx-assign-loan-officer',
@@ -28,12 +31,14 @@ export class AssignLoanOfficerComponent implements OnInit {
    * @param {LoansService} systemService Loan Service.
    * @param {ActivatedRoute} route Activated Route.
    * @param {Router} router Router for navigation.
+   * @param {SettingsService} settingsService Settings Service
    */
   constructor(private formBuilder: FormBuilder,
     private loanService: LoansService,
     private route: ActivatedRoute,
     private router: Router,
-    private datePipe: DatePipe) {
+    private datePipe: DatePipe,
+    private settingsService: SettingsService) {
       this.loanId = this.route.parent.snapshot.params['loanId'];
     }
 
@@ -57,18 +62,18 @@ export class AssignLoanOfficerComponent implements OnInit {
 
   submit() {
     const assignmentDate = this.assignOfficerForm.value.assignmentDate;
-    const dateFormat = 'yyyy-MM-dd';
+    const dateFormat = this.settingsService.dateFormat;
     this.assignOfficerForm.patchValue({
       assignmentDate: this.datePipe.transform(assignmentDate, dateFormat)
     });
     const assignForm = this.assignOfficerForm.value;
-    assignForm.locale = 'en';
+    assignForm.locale = this.settingsService.language.code;
     assignForm.dateFormat = dateFormat;
     assignForm.fromLoanOfficerId = this.dataObject.loanOfficerId || '';
 
-    this.loanService.loanActionButtons(this.loanId, assignForm, 'assignLoanOfficer')
+    this.loanService.loanActionButtons(this.loanId, 'assignLoanOfficer', assignForm)
       .subscribe((response: any) => {
-        this.router.navigate([`../../${this.loanId}/general`], { relativeTo: this.route });
+        this.router.navigate([`../../general`], { relativeTo: this.route });
     });
   }
 

@@ -34,6 +34,39 @@ export class TemplatesService {
   }
 
   /**
+   * @returns {Observable<any>}.
+   */
+  getCreateTemplateData(): Observable<any> {
+    return this.http.get('/templates/template');
+  }
+
+  /**
+   * @param templateId Template Id.
+   * @returns {Observable<any>}.
+   */
+  getEditTemplateData(templateId: string): Observable<any> {
+    return this.http.get(`/templates/${templateId}/template`);
+  }
+
+  /**
+   * @param templateData Template to be created.
+   * @param templateId Template Id.
+   * @returns {Observable<any>}.
+   */
+  createTemplate(templateData: any): Observable<any>  {
+    return this.http.post(`/templates`, templateData);
+  }
+
+  /**
+   * @param templateData Templete Data to be edited.
+   * @param templateId Template Id.
+   * @returns {Observable<any>}.
+   */
+  updateTemplate(templateData: any, templateId: any): Observable<any>  {
+    return this.http.put(`/templates/${templateId}`, templateData);
+  }
+
+  /**
    * @param templateId Template ID.
    * @returns {Observable<any>}
    */

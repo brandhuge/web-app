@@ -1,13 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatTable } from '@angular/material/table';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 
 /** Custom Services */
 import { ClientsService } from '../../clients.service';
 
 /** Custom Components */
-import { UploadDocumentDialogComponent } from '../upload-document-dialog/upload-document-dialog.component';
+import { UploadDocumentDialogComponent } from '../custom-dialogs/upload-document-dialog/upload-document-dialog.component';
 import { DeleteDialogComponent } from '../../../shared/delete-dialog/delete-dialog.component';
 
 
@@ -17,7 +17,7 @@ import { DeleteDialogComponent } from '../../../shared/delete-dialog/delete-dial
   styleUrls: ['./documents-tab.component.scss']
 })
 export class DocumentsTabComponent implements OnInit {
-  @ViewChild('documentsTable') documentsTable: MatTable<Element>;
+  @ViewChild('documentsTable', { static: true }) documentsTable: MatTable<Element>;
   documentsColumns: string[] = ['name', 'description', 'fileName', 'actions'];
   clientDocuments: any;
   clientId: string;

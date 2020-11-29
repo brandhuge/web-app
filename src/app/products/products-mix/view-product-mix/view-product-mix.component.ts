@@ -1,7 +1,14 @@
 /** Angular Imports */
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { DeleteDialogComponent } from 'app/shared/delete-dialog/delete-dialog.component';
+
+/** Custom Services */
+import { ProductsService } from 'app/products/products.service';
 
 /**
  * View product mix component.
@@ -25,19 +32,22 @@ export class ViewProductMixComponent implements OnInit {
   restrictedProductsDisplayedColumns: string[] = ['name'];
 
   /** Paginator for allowed products table. */
-  @ViewChild('allowed') allowedPaginator: MatPaginator;
+  @ViewChild('allowed', { static: true }) allowedPaginator: MatPaginator;
   /** Paginator for restricted products table. */
-  @ViewChild('restricted') restrictedPaginator: MatPaginator;
+  @ViewChild('restricted', { static: true }) restrictedPaginator: MatPaginator;
   /** Sorter for allowed products table. */
-  @ViewChild(MatSort) allowedSort: MatSort;
+  @ViewChild(MatSort, { static: true }) allowedSort: MatSort;
   /** Sorter for restricted products table. */
-  @ViewChild(MatSort) restrictedSort: MatSort;
+  @ViewChild(MatSort, { static: true }) restrictedSort: MatSort;
 
   /**
    * Retrieves the product mix data from `resolve`.
    * @param {ActivatedRoute} route Activated Route.
    */
-  constructor(private route: ActivatedRoute) {
+  constructor(private route: ActivatedRoute,
+              private dialog: MatDialog,
+              private productsService: ProductsService,
+              private router: Router ) {
     this.route.data.subscribe((data: { productMix: any }) => {
       this.productMixData = data.productMix;
     });
@@ -67,5 +77,22 @@ export class ViewProductMixComponent implements OnInit {
     this.restrictedProductsDatasource = new MatTableDataSource(this.productMixData.restrictedProducts);
     this.restrictedProductsDatasource.paginator = this.restrictedPaginator;
     this.restrictedProductsDatasource.sort = this.restrictedSort;
+  }
+
+  /**
+   * Deletes the product mix
+   */
+  delete() {
+    const deleteProductMixDialogRef = this.dialog.open(DeleteDialogComponent, {
+      data: { deleteContext: `the productmix component with id ${this.productMixData.productId}` }
+    });
+    deleteProductMixDialogRef.afterClosed().subscribe((response: any) => {
+      if (response.delete) {
+        this.productsService.deleteProductMix(this.productMixData.productId)
+          .subscribe(() => {
+            this.router.navigate(['../'], { relativeTo: this.route });
+          });
+      }
+    });
   }
 }

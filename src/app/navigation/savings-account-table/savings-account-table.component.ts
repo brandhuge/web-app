@@ -1,6 +1,8 @@
 /** Angular Imports */
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
-import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 
 /** Custom Pipes */
 import { AccountsFilterPipe } from '../../pipes/accounts-filter.pipe';
@@ -22,14 +24,14 @@ export class SavingsAccountTableComponent implements OnInit {
   accountData: any;
 
   /** Paginator for savings account table. */
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   /** Sorter for savings account table. */
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   /** Savings Account Setter */
   @Input() set savingsAccountData(data: any) {
     this.accountData = data;
-    const filteredAccountData = this.accountsFilterPipe.transform(data, 'saving', this.showClosed ? 'closed' : 'open');
+    const filteredAccountData = this.accountsFilterPipe.transform(data, 'saving', this.showClosed ? 'closed' : 'open', 'isSavings');
     this.dataSource = new MatTableDataSource(filteredAccountData);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
@@ -56,7 +58,7 @@ export class SavingsAccountTableComponent implements OnInit {
    */
   toggleClosed() {
     this.showClosed = !this.showClosed;
-    const filteredAccountData = this.accountsFilterPipe.transform(this.accountData, 'saving', this.showClosed ? 'closed' : 'open');
+    const filteredAccountData = this.accountsFilterPipe.transform(this.accountData, 'saving', this.showClosed ? 'closed' : 'open', 'isSavings');
     this.dataSource = new MatTableDataSource(filteredAccountData);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;

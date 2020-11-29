@@ -1,4 +1,5 @@
 <mat-card class="container">
+
   <div fxLayout="row" fxLayoutAlign="start center">
     <div class="search-box">
       <mat-form-field>
@@ -7,7 +8,10 @@
       <mat-checkbox #showClosedGroups labelPosition="after" (change)="changeShowClosedGroups()">Show Closed Groups</mat-checkbox>
     </div>
     <div class="action-button" fxLayoutGap="25px">
-      <button mat-raised-button color="primary" [routerLink]="['create']">
+      <button mat-raised-button color="primary" [routerLink]="['../', 'organization', 'bulk-import', 'Groups']">
+        <fa-icon icon="download"></fa-icon>&nbsp;&nbsp;Import Group
+      </button>
+      <button mat-raised-button color="primary" [routerLink]="['create']" *mifosxHasPermission="'CREATE_GROUP'">
         <fa-icon icon="plus"></fa-icon>&nbsp;&nbsp;Create Group
       </button>
     </div>
@@ -33,7 +37,7 @@
     <ng-container matColumnDef="status">
       <th mat-header-cell *matHeaderCellDef> Status </th>
       <td mat-cell *matCellDef="let row">
-        <div [ngClass]="row.active|statusLookup">
+        <div [ngClass]="row.status.code|statusLookup">
           <fa-icon icon="stop"></fa-icon>
         </div>
       </td>

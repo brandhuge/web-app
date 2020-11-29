@@ -1,7 +1,9 @@
  /** Angular Imports */
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
-import { ActivatedRoute } from '@angular/router';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { ActivatedRoute, Router } from '@angular/router';
 
 /**
  * Dividends component.
@@ -21,15 +23,16 @@ export class ShareProductsDividendsComponent implements OnInit {
   dataSource: MatTableDataSource<any>;
 
   /** Paginator for dividends table. */
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   /** Sorter for dividends table. */
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   /**
    * Retrieves the dividends data from `resolve`.
    * @param {ActivatedRoute} route Activated Route.
    */
-  constructor(private route: ActivatedRoute) {
+  constructor(private route: ActivatedRoute,
+              private router: Router) {
     this.route.data.subscribe((data: {dividends: any}) => {
       this.dividendData = data.dividends.pageItems;
     });
@@ -49,6 +52,11 @@ export class ShareProductsDividendsComponent implements OnInit {
     this.dataSource = new MatTableDataSource(this.dividendData);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+  }
+
+  showDividend(dividendId: any, status: string) {
+    const queryParams: any = { status: status };
+    this.router.navigate([dividendId], { relativeTo: this.route, queryParams: queryParams });
   }
 
   /**

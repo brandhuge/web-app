@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MatTableDataSource } from '@angular/material';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'mifosx-general-tab',
@@ -32,7 +32,7 @@ export class GeneralTabComponent implements OnInit {
   detailsDataSource: MatTableDataSource<any>;
 
   constructor(private route: ActivatedRoute) {
-    this.route.data.subscribe((data: { loanDetailsData: any, }) => {
+    this.route.parent.data.subscribe((data: { loanDetailsData: any, }) => {
       this.loanDetails = data.loanDetailsData;
     });
   }

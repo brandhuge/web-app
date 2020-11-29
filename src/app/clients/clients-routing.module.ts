@@ -19,6 +19,11 @@ import { NotesTabComponent } from './clients-view/notes-tab/notes-tab.component'
 import { DocumentsTabComponent } from './clients-view/documents-tab/documents-tab.component';
 import { DatatableTabComponent } from './clients-view/datatable-tab/datatable-tab.component';
 import { AddressTabComponent } from './clients-view/address-tab/address-tab.component';
+import { ClientActionsComponent } from './clients-view/client-actions/client-actions.component';
+import { ViewChargeComponent } from './clients-view/charges/view-charge/view-charge.component';
+import { ClientPayChargesComponent } from './clients-view/charges/client-pay-charges/client-pay-charges.component';
+import { EditClientComponent } from './edit-client/edit-client.component';
+import { CreateClientComponent } from './create-client/create-client.component';
 
 /** Custom Resolvers */
 import { ClientViewResolver } from './common-resolvers/client-view.resolver';
@@ -37,8 +42,12 @@ import { ClientDatatableResolver } from './common-resolvers/client-datatable.res
 import { ClientIdentifierTemplateResolver } from './common-resolvers/client-identifier-template.resolver';
 import { ClientAddressFieldConfigurationResolver } from './common-resolvers/client-address-fieldconfiguration.resolver';
 import { ClientAddressTemplateResolver } from './common-resolvers/client-address-template.resolver';
-import { ChargesOverviewComponent } from './clients-view/charges-overview/charges-overview.component';
-import { ClientChargeOverviewResolver } from './clients-view/charges-overview/charge-overview.resolver';
+import { ChargesOverviewComponent } from './clients-view/charges/charges-overview/charges-overview.component';
+import { ClientChargeOverviewResolver } from './clients-view/charges/charges-overview/charge-overview.resolver';
+import { ClientActionsResolver } from './common-resolvers/client-actions.resolver';
+import { ClientChargeViewResolver } from './common-resolvers/client-charge-view.resolver';
+import { ClientTransactionPayResolver } from './common-resolvers/client-transaction-pay.resolver';
+import { ClientDataAndTemplateResolver } from './common-resolvers/client-and-template.resolver';
 
 const routes: Routes = [
   Route.withShell([{
@@ -47,7 +56,16 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        component: ClientsComponent,
+        component: ClientsComponent
+      },
+      {
+        path: 'create',
+        data: { title: extract('Create Client'), breadcrumb: 'Create Client', routeParamBreadcrumb: false },
+        component: CreateClientComponent,
+        resolve: {
+          clientAddressFieldConfig: ClientAddressFieldConfigurationResolver,
+          clientTemplate: ClientTemplateResolver
+        }
       },
       {
         path: ':clientId',
@@ -147,14 +165,6 @@ const routes: Routes = [
                 clientDatatable: ClientDatatableResolver
               }
             }]
-          },
-          {
-            path: 'chargeoverview',
-            data: { title: extract('Charges Overview'), breadcrumb: 'Charges Overview', routeParamBreadcrumb: 'chargeId' },
-            component: ChargesOverviewComponent,
-            resolve: {
-              clientChargesData: ClientChargeOverviewResolver,
-            }
           }
         ]
       },
@@ -169,18 +179,79 @@ const routes: Routes = [
         data: { title: extract('Clients View'), routeParamBreadcrumb: 'clientId' },
         children: [
           {
-            path: 'loans',
-            data: { title: extract('Loans'), breadcrumb: 'loans', routeParamBreadcrumb: false },
-            loadChildren: '../loans/loans.module#LoansModule'
+            path: 'edit',
+            data: { title: extract('Edit Client'), breadcrumb: 'Edit', routeParamBreadcrumb: false },
+            component: EditClientComponent,
+            resolve: {
+              clientDataAndTemplate: ClientDataAndTemplateResolver
+            }
           },
           {
-            path: 'savingsaccounts',
-            loadChildren: '../savings/savings.module#SavingsModule'
+            path: 'actions/:name',
+            data: { title: extract('Client Actions'), routeParamBreadcrumb: 'name' },
+            component: ClientActionsComponent,
+            resolve: {
+              clientActionData: ClientActionsResolver
+            }
           },
           {
-            path: 'sharesaccounts',
-            loadChildren: '../shares/shares.module#SharesModule'
+            path: 'charges',
+            children: [
+              {
+                path: 'overview',
+                data: { title: extract('Charges Overview'), breadcrumb: 'Charges Overview' },
+                component: ChargesOverviewComponent,
+                resolve: {
+                  clientChargesData: ClientChargeOverviewResolver
+                }
+              },
+              {
+                path: ':chargeId',
+                data: { title: extract('Charges'), routeParamBreadcrumb: 'chargeId' },
+                children: [
+                  {
+                    path: '',
+                    component: ViewChargeComponent,
+                    resolve: {
+                      clientChargeData: ClientChargeViewResolver
+                    }
+                  },
+                  {
+                    path: 'pay',
+                    data: { title: extract('Pay Charge'), routeParamBreadcrumb: false },
+                    component: ClientPayChargesComponent,
+                    resolve: {
+                      transactionData: ClientTransactionPayResolver
+                    }
+                  }
+                ]
+              }
+            ]
           },
+          {
+            path: 'loans-accounts',
+            loadChildren: () => import('../loans/loans.module').then(m => m.LoansModule)
+          },
+          {
+            path: 'fixed-deposits-accounts',
+            loadChildren: () => import('../deposits/fixed-deposits/fixed-deposits.module').then(m => m.FixedDepositsModule)
+          },
+          {
+            path: 'savings-accounts',
+            loadChildren: () => import('../savings/savings.module').then(m => m.SavingsModule)
+          },
+          {
+            path: 'recurringdeposits',
+            loadChildren: () => import('../deposits/recurring-deposits/recurring-deposits.module').then(m => m.RecurringDepositsModule)
+          },
+          {
+            path: 'shares-accounts',
+            loadChildren: () => import('../shares/shares.module').then(m => m.SharesModule)
+          },
+          {
+            path: 'standing-instructions',
+            loadChildren: () => import('../account-transfers/account-transfers.module').then(m => m.AccountTransfersModule)
+          }
         ]
       }
     ]
@@ -208,7 +279,11 @@ const routes: Routes = [
     ClientIdentifierTemplateResolver,
     ClientAddressFieldConfigurationResolver,
     ClientAddressTemplateResolver,
-    ClientChargeOverviewResolver
+    ClientChargeOverviewResolver,
+    ClientActionsResolver,
+    ClientChargeViewResolver,
+    ClientTransactionPayResolver,
+    ClientDataAndTemplateResolver
   ]
 })
 export class ClientsRoutingModule { }

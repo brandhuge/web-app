@@ -2,7 +2,7 @@
 import { Component, OnChanges, OnInit, Input, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatTable } from '@angular/material/table';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { DatePipe } from '@angular/common';
 
 /** Custom Dialogs */
@@ -18,6 +18,7 @@ import { DatepickerBase } from 'app/shared/form-dialog/formfield/model/datepicke
 
 /** Custom Services */
 import { CentersService } from '../../../centers.service';
+import { SettingsService } from 'app/settings/settings.service';
 
 /**
  * Center Multi Row Data Tables
@@ -44,18 +45,20 @@ export class MultiRowComponent implements OnInit, OnChanges {
   showDeleteBotton: boolean;
 
   /** Data Table Reference */
-  @ViewChild('dataTable') dataTableRef: MatTable<Element>;
+  @ViewChild('dataTable', { static: true }) dataTableRef: MatTable<Element>;
 
   /**
    * Fetches center Id from parent route params.
    * @param {ActivatedRoute} route Activated Route.
    * @param {DatePipe} datePipe Date Pipe.
    * @param {CentersService} centersService Centers Service.
+   * @param {SettingsService} settingsService Settings Service.
    * @param {MatDialog} dialog Mat Dialog.
    */
   constructor(private route: ActivatedRoute,
               private datePipe: DatePipe,
               private centersService: CentersService,
+              private settingsService: SettingsService,
               private dialog: MatDialog) {
     this.centerId = this.route.parent.parent.snapshot.paramMap.get('centerId');
   }
@@ -85,7 +88,7 @@ export class MultiRowComponent implements OnInit, OnChanges {
    * Adds a new row to the given multi row data table.
    */
   add() {
-    let dataTableEntryObject: any = { locale: 'en' };
+    let dataTableEntryObject: any = { locale: this.settingsService.language.code };
     const dateTransformColumns: string[] = [];
     const columns = this.dataObject.columnHeaders.filter((column: any) => {
       return ((column.columnName !== 'id') && (column.columnName !== 'center_id'));
@@ -118,7 +121,7 @@ export class MultiRowComponent implements OnInit, OnChanges {
         });
         case 'DATE': {
           dateTransformColumns.push(column.columnName);
-          dataTableEntryObject.dateFormat = 'yyyy-MM-dd';
+          dataTableEntryObject.dateFormat = this.settingsService.dateFormat;
           return new DatepickerBase({
             controlName: column.columnName,
             label: column.columnName,

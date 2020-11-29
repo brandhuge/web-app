@@ -34,7 +34,7 @@ import { EditEmployeeComponent } from './employees/edit-employee/edit-employee.c
 import { CreateTellerComponent } from './tellers/create-teller/create-teller.component';
 import { EditTellerComponent } from './tellers/edit-teller/edit-teller.component';
 import { ViewLoanProvisioningCriteriaComponent } from './loan-provisioning-criteria/view-loan-provisioning-criteria/view-loan-provisioning-criteria.component';
-import { ViewCashierComponent } from './tellers/view-cashier/view-cashier.component';
+import { ViewCashierComponent } from './tellers/cashiers/view-cashier/view-cashier.component';
 import { ViewHolidaysComponent } from './holidays/view-holidays/view-holidays.component';
 import { ViewOfficeComponent } from './offices/view-office/view-office.component';
 import { GeneralTabComponent } from './offices/view-office/general-tab/general-tab.component';
@@ -42,6 +42,33 @@ import { DatatableTabsComponent } from './offices/view-office/datatable-tabs/dat
 import { SingleRowComponent } from './offices/view-office/datatable-tabs/single-row/single-row.component';
 import { MultiRowComponent } from './offices/view-office/datatable-tabs/multi-row/multi-row.component';
 import { ViewCampaignComponent } from './sms-campaigns/view-campaign/view-campaign.component';
+import { ManageFundsComponent } from './manage-funds/manage-funds.component';
+import { ManageCurrenciesComponent } from './currencies/manage-currencies/manage-currencies.component';
+import { CashiersComponent } from './tellers/cashiers/cashiers.component';
+import { TransactionsComponent } from './tellers/cashiers/transactions/transactions.component';
+import { SettleCashComponent } from './tellers/cashiers/settle-cash/settle-cash.component';
+import { AllocateCashComponent } from './tellers/cashiers/allocate-cash/allocate-cash.component';
+import { EditCashierComponent } from './tellers/cashiers/edit-cashier/edit-cashier.component';
+import { CreateCashierComponent } from './tellers/cashiers/create-cashier/create-cashier.component';
+import { EditHolidayComponent } from './holidays/edit-holiday/edit-holiday.component';
+import { EditAdhocQueryComponent } from './adhoc-query/edit-adhoc-query/edit-adhoc-query.component';
+import { BulkImportComponent } from './/bulk-import/bulk-import.component';
+import { ViewBulkImportComponent } from './bulk-import/view-bulk-import/view-bulk-import.component';
+import { CreateCampaignComponent } from './sms-campaigns/create-campaign/create-campaign.component';
+import { SmsCampaignStepComponent } from './sms-campaigns/sms-campaign-stepper/sms-campaign-step/sms-campaign-step.component';
+import { CampaignMessageStepComponent } from './sms-campaigns/sms-campaign-stepper/campaign-message-step/campaign-message-step.component';
+import { CampaignPreviewStepComponent } from './sms-campaigns/sms-campaign-stepper/campaign-preview-step/campaign-preview-step.component';
+import { BusinessRuleParametersComponent } from './sms-campaigns/sms-campaign-stepper/sms-campaign-step/business-rule-parameters/business-rule-parameters.component';
+import { EditCampaignComponent } from './sms-campaigns/edit-campaign/edit-campaign.component';
+import { EditSmsCampaignStepComponent } from './sms-campaigns/sms-campaign-stepper/edit-sms-campaign-step/edit-sms-campaign-step.component';
+import { EditBusinessRuleParametersComponent } from './sms-campaigns/sms-campaign-stepper/edit-sms-campaign-step/edit-business-rule-parameters/edit-business-rule-parameters.component';
+import { CreateEnityDataTableChecksComponent } from './entity-data-table-checks/create-enity-data-table-checks/create-enity-data-table-checks.component';
+import { BulkLoanReassignmnetComponent } from './bulk-loan-reassignmnet/bulk-loan-reassignmnet.component';
+import { CreateLoanProvisioningCriteriaComponent } from './loan-provisioning-criteria/create-loan-provisioning-criteria/create-loan-provisioning-criteria.component';
+import { EditLoanProvisioningCriteriaComponent } from './loan-provisioning-criteria/edit-loan-provisioning-criteria/edit-loan-provisioning-criteria.component';
+import { StandingInstructionsHistoryComponent } from './standing-instructions-history/standing-instructions-history.component';
+import { FundMappingComponent } from './fund-mapping/fund-mapping.component';
+import { CreateHolidayComponent } from './holidays/create-holiday/create-holiday.component';
 
 /**
  * Organization Module
@@ -89,7 +116,34 @@ import { ViewCampaignComponent } from './sms-campaigns/view-campaign/view-campai
     DatatableTabsComponent,
     SingleRowComponent,
     MultiRowComponent,
-    ViewCampaignComponent
+    ViewCampaignComponent,
+    ManageFundsComponent,
+    ManageCurrenciesComponent,
+    CashiersComponent,
+    TransactionsComponent,
+    SettleCashComponent,
+    AllocateCashComponent,
+    EditCashierComponent,
+    CreateCashierComponent,
+    EditHolidayComponent,
+    EditAdhocQueryComponent,
+    BulkImportComponent,
+    ViewBulkImportComponent,
+    CreateCampaignComponent,
+    SmsCampaignStepComponent,
+    CampaignMessageStepComponent,
+    CampaignPreviewStepComponent,
+    BusinessRuleParametersComponent,
+    EditCampaignComponent,
+    EditSmsCampaignStepComponent,
+    EditBusinessRuleParametersComponent,
+    CreateEnityDataTableChecksComponent,
+    BulkLoanReassignmnetComponent,
+    CreateLoanProvisioningCriteriaComponent,
+    EditLoanProvisioningCriteriaComponent,
+    StandingInstructionsHistoryComponent,
+    FundMappingComponent,
+    CreateHolidayComponent,
   ]
 })
 export class OrganizationModule { }

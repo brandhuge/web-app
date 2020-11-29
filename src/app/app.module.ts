@@ -1,6 +1,6 @@
 /** Angular Imports */
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, HammerModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { ServiceWorkerModule } from '@angular/service-worker';
@@ -34,8 +34,11 @@ import { OrganizationModule } from './organization/organization.module';
 import { TemplatesModule } from './templates/templates.module';
 import { UsersModule } from './users/users.module';
 import { ReportsModule } from './reports/reports.module';
-
-
+import { SearchModule } from './search/search.module';
+import { NotificationsModule } from './notifications/notifications.module';
+import { CollectionsModule } from './collections/collections.module';
+import { ProfileModule } from './profile/profile.module';
+import { TasksModule } from './tasks/tasks.module';
 
 /** Main Routing Module */
 import { AppRoutingModule } from './app-routing.module';
@@ -49,12 +52,14 @@ import { AppRoutingModule } from './app-routing.module';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    HammerModule,
     HttpClientModule,
     ServiceWorkerModule.register('./ngsw-worker.js', { enabled: environment.production }),
     TranslateModule.forRoot(),
     CoreModule,
     HomeModule,
     LoginModule,
+    ProfileModule,
     SettingsModule,
     NavigationModule,
     ClientsModule,
@@ -68,6 +73,10 @@ import { AppRoutingModule } from './app-routing.module';
     OrganizationModule,
     TemplatesModule,
     UsersModule,
+    NotificationsModule,
+    SearchModule,
+    CollectionsModule,
+    TasksModule,
     AppRoutingModule,
   ],
   declarations: [WebAppComponent, NotFoundComponent],

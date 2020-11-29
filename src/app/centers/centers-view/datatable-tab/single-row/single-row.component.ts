@@ -1,7 +1,7 @@
 /** Angular Imports */
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { DatePipe } from '@angular/common';
 
 /** Custom Components */
@@ -17,7 +17,7 @@ import { CheckboxBase } from 'app/shared/form-dialog/formfield/model/checkbox-ba
 
 /** Custom Services */
 import { CentersService } from '../../../centers.service';
-
+import { SettingsService } from 'app/settings/settings.service';
 
 /**
  * Centers Single Row Data Tables
@@ -42,11 +42,13 @@ export class SingleRowComponent implements OnInit {
    * @param {ActivatedRoute} route Activated Route.
    * @param {DatePipe} datePipe Date Pipe.
    * @param {CentersService} centersService Centers Service.
+   * @param {SettingsService} settingsService Settings Service.
    * @param {MatDialog} dialog Mat Dialog.
    */
   constructor(private route: ActivatedRoute,
               private datePipe: DatePipe,
               private dialog: MatDialog,
+              private settingsService: SettingsService,
               private centersService: CentersService) {
     this.centerId = this.route.parent.parent.snapshot.paramMap.get('centerId');
   }
@@ -65,7 +67,7 @@ export class SingleRowComponent implements OnInit {
    * Creates a new instance of the given single row data table.
    */
   add() {
-    let dataTableEntryObject: any = { locale: 'en' };
+    let dataTableEntryObject: any = { locale: this.settingsService.language.code };
     const dateTransformColumns: string[] = [];
     const columns = this.dataObject.columnHeaders.filter((column: any) => {
       return ((column.columnName !== 'id') && (column.columnName !== 'center_id'));
@@ -95,7 +97,7 @@ export class SingleRowComponent implements OnInit {
    * Edits the current instance of single row data table.
    */
   edit() {
-    let dataTableEntryObject: any = { locale: 'en' };
+    let dataTableEntryObject: any = { locale: this.settingsService.language.code };
     const dateTransformColumns: string[] = [];
     const columns = this.dataObject.columnHeaders.filter((column: any) => {
       return ((column.columnName !== 'id') && (column.columnName !== 'center_id'));
@@ -180,7 +182,7 @@ export class SingleRowComponent implements OnInit {
         });
         case 'DATE': {
           dateTransformColumns.push(column.columnName);
-          dataTableEntryObject.dateFormat = 'yyyy-MM-dd';
+          dataTableEntryObject.dateFormat = this.settingsService.dateFormat;
           return new DatepickerBase({
             controlName: column.columnName,
             label: column.columnName,

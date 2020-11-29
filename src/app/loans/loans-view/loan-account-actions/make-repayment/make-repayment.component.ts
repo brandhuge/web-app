@@ -1,9 +1,16 @@
+/** Angular Imports */
 import { Component, OnInit, Input } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { LoansService } from 'app/loans/loans.service';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DatePipe } from '@angular/common';
 
+/** Custom Services */
+import { LoansService } from 'app/loans/loans.service';
+import { DatePipe } from '@angular/common';
+import { SettingsService } from 'app/settings/settings.service';
+
+/**
+ * Loan Make Repayment Component
+ */
 @Component({
   selector: 'mifosx-make-repayment',
   templateUrl: './make-repayment.component.html',
@@ -14,92 +21,97 @@ export class MakeRepaymentComponent implements OnInit {
   @Input() dataObject: any;
   /** Loan Id */
   loanId: string;
+  /** Payment Type Options */
   paymentTypes: any;
-  showPenaltyPortionDisplay: boolean;
-  principalPortion: any;
-  interestPortion: any;
-  feeChargesPortion: any;
-  processDate: boolean;
+  /** Show payment details */
   showPaymentDetails = false;
   /** Minimum Date allowed. */
   minDate = new Date(2000, 0, 1);
   /** Maximum Date allowed. */
   maxDate = new Date();
-  /** Assign loan Officer form. */
+  /** Repayment Loan Form */
   repaymentLoanForm: FormGroup;
 
   /**
    * @param {FormBuilder} formBuilder Form Builder.
-   * @param {LoansService} systemService Loan Service.
+   * @param {LoansService} loanService Loan Service.
    * @param {ActivatedRoute} route Activated Route.
    * @param {Router} router Router for navigation.
+   * @param {DatePipe} datePipe Date Pipe.
+   * @param {SettingsService} settingsService Settings Service
    */
   constructor(private formBuilder: FormBuilder,
     private loanService: LoansService,
     private route: ActivatedRoute,
     private router: Router,
-    private datePipe: DatePipe) {
+    private datePipe: DatePipe,
+    private settingsService: SettingsService) {
       this.loanId = this.route.parent.snapshot.params['loanId'];
     }
 
   /**
-   * Creates the assign officer form.
+   * Creates the repayment loan form
+   * and initialize with the required values
    */
   ngOnInit() {
-    this.createprepayLoanForm();
-    // this.setPrepayLoanDetails();
+    this.createRepaymentLoanForm();
+    // this.setRepaymentLoanDetails();
   }
 
   /**
    * Creates the create close form.
    */
-  createprepayLoanForm() {
+  createRepaymentLoanForm() {
     this.repaymentLoanForm = this.formBuilder.group({
       'transactionDate': [new Date(), Validators.required],
       'transactionAmount': ['', Validators.required],
       'paymentTypeId': '',
-      'accountNumber': '',
-      'chequeNumber': '',
-      'routingCode': '',
-      'receiptNumber': '',
-      'bankNumber': '',
       'note': ''
     });
   }
 
-  setPrepayLoanDetails() {
+  setRepaymentLoanDetails() {
     this.paymentTypes = this.dataObject.paymentTypeOptions;
     this.repaymentLoanForm.patchValue({
       transactionAmount: this.dataObject.amount,
       transactionDate: new Date(this.dataObject.date)
     });
-    if (this.dataObject.penaltyChargesPortion > 0) {
-        this.showPenaltyPortionDisplay = true;
+  }
+
+  /**
+   * Add payment detail fields to the UI.
+   */
+  addPaymentDetails() {
+    this.showPaymentDetails = !this.showPaymentDetails;
+    if (this.showPaymentDetails) {
+      this.repaymentLoanForm.addControl('accountNumber', new FormControl(''));
+      this.repaymentLoanForm.addControl('checkNumber', new FormControl(''));
+      this.repaymentLoanForm.addControl('routingCode', new FormControl(''));
+      this.repaymentLoanForm.addControl('receiptNumber', new FormControl(''));
+      this.repaymentLoanForm.addControl('bankNumber', new FormControl(''));
+    } else {
+      this.repaymentLoanForm.removeControl('accountNumber');
+      this.repaymentLoanForm.removeControl('checkNumber');
+      this.repaymentLoanForm.removeControl('routingCode');
+      this.repaymentLoanForm.removeControl('receiptNumber');
+      this.repaymentLoanForm.removeControl('bankNumber');
     }
-    this.feeChargesPortion = this.dataObject.feeChargesPortion;
-    this.processDate = true;
   }
 
-  toggleDisplay() {
-    this.showPaymentDetails = !(this.showPaymentDetails);
-  }
-
+  /** Submits the repayment form */
   submit() {
-    const transactionDate = this.repaymentLoanForm.value.transactionDate;
-    const dateFormat = 'yyyy-MM-dd';
+    const prevTransactionDate: Date = this.repaymentLoanForm.value.transactionDate;
+    // TODO: Update once language and date settings are setup
+    const dateFormat = this.settingsService.dateFormat;
     this.repaymentLoanForm.patchValue({
-      transactionDate: this.datePipe.transform(transactionDate, dateFormat)
+      transactionDate: this.datePipe.transform(prevTransactionDate, dateFormat)
     });
-    const repaymentForm = {
-      locale: 'en',
-      dateFormat: dateFormat,
-      paymentTypeId: this.repaymentLoanForm.value.paymentTypeId,
-      transactionDate: this.repaymentLoanForm.value.transactionDate,
-      transactionAmount: this.repaymentLoanForm.value.transactionAmount
-    };
-    this.loanService.submitLoanActionButton(this.loanId, repaymentForm, 'repayment')
+    const repaymentLoanData = this.repaymentLoanForm.value;
+    repaymentLoanData.locale = this.settingsService.language.code;
+    repaymentLoanData.dateFormat = dateFormat;
+    this.loanService.submitLoanActionButton(this.loanId, repaymentLoanData, 'repayment')
       .subscribe((response: any) => {
-        this.router.navigate(['../general'], { relativeTo: this.route });
+        this.router.navigate(['../../../general'], { relativeTo: this.route });
     });
   }
 

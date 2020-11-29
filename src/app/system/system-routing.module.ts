@@ -23,6 +23,8 @@ import { EditHookComponent } from './manage-hooks/edit-hook/edit-hook.component'
 import { RolesAndPermissionsComponent } from './roles-and-permissions/roles-and-permissions.component';
 import { AddRoleComponent } from './roles-and-permissions/add-role/add-role.component';
 import { ManageSurveysComponent } from './manage-surveys/manage-surveys.component';
+import { CreateSurveyComponent } from './manage-surveys/create-survey/create-survey.component';
+import { ViewSurveyComponent } from './manage-surveys/view-survey/view-survey.component';
 import { ManageSchedulerJobsComponent } from './manage-scheduler-jobs/manage-scheduler-jobs.component';
 import { GlobalConfigurationsComponent } from './global-configurations/global-configurations.component';
 import { EditConfigurationComponent } from './global-configurations/edit-configuration/edit-configuration.component';
@@ -73,6 +75,7 @@ import { AuditTrailSearchTemplateResolver } from './audit-trails/audit-trail-sea
 import { AuditTrailResolver } from './audit-trails/view-audit/audit-trail.resolver';
 import { ReportsResolver } from './manage-reports/reports.resolver';
 import { ReportResolver } from './manage-reports/report.resolver';
+import { SurveyResolver } from './manage-surveys/survey.resolver';
 import { ReportTemplateResolver } from './manage-reports/report-template.resolver';
 import { ViewSchedulerJobComponent } from './manage-scheduler-jobs/view-scheduler-job/view-scheduler-job.component';
 import { ViewSchedulerJobResolver } from './manage-scheduler-jobs/view-scheduler-job/view-scheduler-job.resolver';
@@ -80,6 +83,10 @@ import { EditSchedulerJobComponent } from './manage-scheduler-jobs/edit-schedule
 import { ManageSchedulerJobResolver } from './manage-scheduler-jobs/manage-scheduler-job.resolver';
 import { ViewRoleResolver } from './roles-and-permissions/view-role/view-role.resolver';
 import { EntityToEntityMappingResolver } from './entity-to-entity-mapping/entity-to-entity-mapping.resolver';
+import { ConfigureMakerCheckerTasksComponent } from './configure-maker-checker-tasks/configure-maker-checker-tasks.component';
+import { MakerCheckerTasksResolver } from './configure-maker-checker-tasks/configure-maker-checker-tasks.resolver';
+import { ViewHistorySchedulerJobComponent } from './manage-scheduler-jobs/view-history-scheduler-job/view-history-scheduler-job.component';
+import { ViewHistorySchedulerJobsResolver } from './manage-scheduler-jobs/view-history-scheduler-job/view-history-scheduler-job.resolver';
 
 const routes: Routes = [
   Route.withShell([
@@ -361,12 +368,43 @@ const routes: Routes = [
         ]
       },
       {
-        path: 'surveys',
-        component: ManageSurveysComponent,
+        path: 'configure-mc-tasks',
+        data: { title: extract('Configure Maker Checker Tasks'), breadcrumb: 'Configure Maker Checker Tasks' },
+        component: ConfigureMakerCheckerTasksComponent,
         resolve: {
-              surveys: ManageSurveysResolver
+              permissions: MakerCheckerTasksResolver
+          }
         },
+      {
+        path: 'surveys',
         data: { title:  extract('Manage Surveys'), breadcrumb: 'Manage Surveys' },
+        children: [
+          {
+            path: '',
+            component: ManageSurveysComponent,
+            resolve: {
+              surveys: ManageSurveysResolver
+            }
+          },
+          {
+            path: 'create',
+            component: CreateSurveyComponent,
+            data: { title:  extract('Create Survey'), breadcrumb: 'Create' },
+          },
+          {
+            path: ':id',
+            data: {title: extract('View Survey'), routeParamBreadcrumb: 'id'},
+            children: [
+              {
+                path: '',
+                component: ViewSurveyComponent,
+                resolve: {
+                  survey: SurveyResolver
+                }
+              }
+            ]
+          }
+        ]
       },
       {
         path: 'scheduler-jobs',
@@ -397,6 +435,14 @@ const routes: Routes = [
                 resolve: {
                   jobSelected: ManageSchedulerJobResolver
                 }
+              },
+              {
+                path: 'viewhistory',
+                component: ViewHistorySchedulerJobComponent,
+                data: { title: extract('Scheduler Job History'), breadcrumb: 'View History' },
+                resolve: {
+                  jobsSchedulerHistory: ViewHistorySchedulerJobsResolver
+                },
               }
             ]
           }
@@ -549,6 +595,7 @@ const routes: Routes = [
     HooksTemplateResolver,
     RolesAndPermissionsResolver,
     ManageSurveysResolver,
+    SurveyResolver,
     ManageSchedulerJobsResolver,
     GlobalConfigurationsResolver,
     GlobalConfigurationResolver,
@@ -567,7 +614,9 @@ const routes: Routes = [
     ViewSchedulerJobResolver,
     ManageSchedulerJobResolver,
     ViewRoleResolver,
-    EntityToEntityMappingResolver
+    EntityToEntityMappingResolver,
+    MakerCheckerTasksResolver,
+    ViewHistorySchedulerJobsResolver
   ]
 })
 export class SystemRoutingModule { }

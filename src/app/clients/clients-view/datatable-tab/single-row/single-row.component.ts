@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { FormfieldBase } from 'app/shared/form-dialog/formfield/model/formfield-base';
 import { InputBase } from 'app/shared/form-dialog/formfield/model/input-base';
 import { SelectBase } from 'app/shared/form-dialog/formfield/model/select-base';
@@ -13,7 +13,7 @@ import { DeleteDialogComponent } from '../../../../shared/delete-dialog/delete-d
 
 /** Custom Services */
 import { ClientsService } from '../../../clients.service';
-
+import { SettingsService } from 'app/settings/settings.service';
 
 
 @Component({
@@ -30,7 +30,8 @@ export class SingleRowComponent implements OnInit {
   constructor(private route: ActivatedRoute,
     private datePipe: DatePipe,
     private dialog: MatDialog,
-    private clientsService: ClientsService) {
+    private clientsService: ClientsService,
+    private settingsService: SettingsService) {
     this.clientId = this.route.parent.parent.snapshot.paramMap.get('clientId');
   }
 
@@ -42,7 +43,7 @@ export class SingleRowComponent implements OnInit {
 
   add() {
     let dataTableEntryObject: any = {
-      locale: 'en'
+      locale: this.settingsService.language.code
     };
     const dateTransformColumns: string[] = [];
     const columns = this.dataObject.columnHeaders.filter((column: any) => {
@@ -72,7 +73,7 @@ export class SingleRowComponent implements OnInit {
 
   edit() {
     let dataTableEntryObject: any = {
-      locale: 'en'
+      locale: this.settingsService.language.code
     };
     const dateTransformColumns: string[] = [];
     const columns = this.dataObject.columnHeaders.filter((column: any) => {

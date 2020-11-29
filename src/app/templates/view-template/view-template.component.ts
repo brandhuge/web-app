@@ -1,7 +1,7 @@
 /** Angular Imports */
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 
 /** Custom Services */
 import { TemplatesService } from '../templates.service';
@@ -17,7 +17,7 @@ import { DeleteDialogComponent } from 'app/shared/delete-dialog/delete-dialog.co
   templateUrl: './view-template.component.html',
   styleUrls: ['./view-template.component.scss']
 })
-export class ViewTemplateComponent implements OnInit {
+export class ViewTemplateComponent {
 
   /** Template Data */
   templateData: any;
@@ -36,9 +36,6 @@ export class ViewTemplateComponent implements OnInit {
     this.route.data.subscribe((data: { template: any }) => {
       this.templateData = data.template;
     });
-  }
-
-  ngOnInit() {
   }
 
   /**

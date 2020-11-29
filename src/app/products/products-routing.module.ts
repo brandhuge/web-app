@@ -24,8 +24,10 @@ import { ViewShareProductComponent } from './share-products/view-share-product/v
 import { EditShareProductComponent } from './share-products/edit-share-product/edit-share-product.component';
 import { ManageTaxConfigurationsComponent } from './manage-tax-configurations/manage-tax-configurations.component';
 import { RecurringDepositProductsComponent } from './recurring-deposit-products/recurring-deposit-products.component';
+import { ViewRecurringDepositProductComponent } from './recurring-deposit-products/view-recurring-deposit-product/view-recurring-deposit-product.component';
 import { ChargesComponent } from './charges/charges.component';
 import { ViewChargeComponent } from './charges/view-charge/view-charge.component';
+import { CreateChargeComponent } from './charges/create-charge/create-charge.component';
 import { FixedDepositProductsComponent } from './fixed-deposit-products/fixed-deposit-products.component';
 import { CreateFixedDepositProductComponent } from './fixed-deposit-products/create-fixed-deposit-product/create-fixed-deposit-product.component';
 import { ProductsMixComponent } from './products-mix/products-mix.component';
@@ -41,6 +43,13 @@ import { CreateTaxComponentComponent } from './manage-tax-components/create-tax-
 import { EditTaxComponentComponent } from './manage-tax-components/edit-tax-component/edit-tax-component.component';
 import { ViewTaxGroupComponent } from './manage-tax-groups/view-tax-group/view-tax-group.component';
 import { ShareProductsDividendsComponent } from './share-products/dividends-share-product/dividends.components';
+import { CreateRecurringDepositProductComponent } from './recurring-deposit-products/create-recurring-deposit-product/create-recurring-deposit-product.component';
+import { CreateDividendComponent } from './share-products/create-dividend/create-dividend.component';
+import { ViewFixedDepositProductComponent } from './fixed-deposit-products/view-fixed-deposit-product/view-fixed-deposit-product.component';
+import { ViewDividendComponent } from './share-products/view-dividend/view-dividend.component';
+import { CreateTaxGroupComponent } from './manage-tax-groups/create-tax-group/create-tax-group.component';
+import { EditTaxGroupComponent } from './manage-tax-groups/edit-tax-group/edit-tax-group.component';
+import { CreateProductMixComponent } from './products-mix/create-product-mix/create-product-mix.component';
 
 /** Custom Resolvers */
 import { LoanProductsResolver } from './loan-products/loan-products.resolver';
@@ -56,8 +65,10 @@ import { ShareProductsTemplateResolver } from './share-products/share-products-t
 import { ShareProductResolver } from './share-products/share-product-resolver';
 import { ShareProductAndTemplateResolver } from './share-products/edit-share-product/share-product-and-template.resolver';
 import { RecurringDepositProductsResolver } from './recurring-deposit-products/recurring-deposit-products.resolver';
+import { RecurringDepositProductResolver } from './recurring-deposit-products/recurring-deposit-product.resolver';
 import { ChargesResolver } from './charges/charges.resolver';
 import { ChargeResolver } from './charges/charge.resolver';
+import { ChargesTemplateResolver } from './charges/charges-template.resolver';
 import { FixedDepositProductsResolver } from './fixed-deposit-products/fixed-deposit-products.resolver';
 import { FixedDepositProductsTemplateResolver } from './fixed-deposit-products/fixed-deposit-products-template.resolver';
 import { ProductsMixResolver } from './products-mix/products-mix.resolver';
@@ -69,9 +80,20 @@ import { ManageTaxGroupsResolver } from './manage-tax-groups/manage-tax-groups.r
 import { TaxComponentResolver } from './manage-tax-components/tax-component.resolver';
 import { TaxComponentTemplateResolver } from './manage-tax-components/tax-component-template.resolver';
 import { EditChargeComponent } from './charges/edit-charge/edit-charge.component';
-import { ChargesTemplateResolver } from './charges/charges-template.resolver';
 import { TaxGroupResolver } from './manage-tax-groups/tax-group.resolver';
 import { DividendsResolver } from './share-products/dividends-share-product/dividends.resolver';
+import { RecurringDepositProductsTemplateResolver } from './recurring-deposit-products/recurring-deposit-products-template.resolver';
+import { EditRecurringDepositProductComponent } from './recurring-deposit-products/edit-recurring-deposit-product/edit-recurring-deposit-product.component';
+import { RecurringDepositProductAndTemplateResolver } from './recurring-deposit-products/edit-recurring-deposit-product/recurring-deposit-product-and-template.resolver';
+import { ViewDividendDataResolver } from './share-products/view-dividend/view-dividend-data.resolver';
+import { FixedDepositProductResolver } from './fixed-deposit-products/fixed-deposit-product.resolver';
+import { ManageTaxGroupTemplateResolver } from './manage-tax-groups/create-tax-group/manage-tax-group-template.resolver';
+import { EditTaxGroupResolver } from './manage-tax-groups/edit-tax-group/edit-tax-group.resolver';
+import { ProductsMixTemplateResolver } from './products-mix/products-mix-template.resolver';
+import { EditProductMixComponent } from './products-mix/edit-product-mix/edit-product-mix.component';
+import { ChargesTemplateAndResolver } from './charges/charges-template-and-resolver';
+import { EditFixedDepositProductComponent } from './fixed-deposit-products/edit-fixed-deposit-product/edit-fixed-deposit-product.component';
+import { FixedDepositProductAndTemplateResolver } from './fixed-deposit-products/edit-fixed-deposit-product/fixed-deposit-product-and-template.resolver';
 
 /** Products Routes */
 const routes: Routes = [
@@ -209,10 +231,31 @@ const routes: Routes = [
                 {
                   path: 'dividends',
                   data: { title: extract('Share Products Dividends'), breadcrumb: 'Dividends', routeParamBreadcrumb: false},
-                  component: ShareProductsDividendsComponent,
-                  resolve: {
-                    dividends: DividendsResolver
-                  }
+                  children: [
+                    {
+                      path: '',
+                      component: ShareProductsDividendsComponent,
+                      resolve: {
+                        dividends: DividendsResolver
+                      }
+                    },
+                    {
+                      path: 'create',
+                      component: CreateDividendComponent,
+                      data: { title: extract('Create Dividend'), breadcrumb: 'Create', routeParamBreadcrumb: false },
+                      resolve: {
+                        shareProduct: ShareProductResolver
+                      }
+                    },
+                    {
+                      path: ':dividendId',
+                      component: ViewDividendComponent,
+                      data: { title: extract('View Dividend'), routeParamBreadcrumb: 'dividendId' },
+                      resolve: {
+                        dividendData: ViewDividendDataResolver
+                      }
+                    }
+                  ]
                 }
               ]
             }
@@ -280,6 +323,14 @@ const routes: Routes = [
                   }
                 },
                 {
+                  path: 'create',
+                  component: CreateTaxGroupComponent,
+                  data: { title: extract('Create Tax Group'), breadcrumb: 'Create' },
+                  resolve: {
+                    taxGroupTemplate: ManageTaxGroupTemplateResolver
+                  }
+                },
+                {
                   path: ':id',
                   data: { title: extract('View Tax Group'), routeParamBreadcrumb: 'id' },
                   children: [
@@ -289,7 +340,15 @@ const routes: Routes = [
                       resolve: {
                         taxGroup: TaxGroupResolver
                       }
-                    }
+                    },
+                    {
+                      path: 'edit',
+                      data: { title: extract('Edit Tax Group'), breadcrumb: 'Edit', routeParamBreadcrumb: false },
+                      component: EditTaxGroupComponent,
+                      resolve: {
+                        taxGroup: EditTaxGroupResolver
+                      }
+                    },
                   ]
                 }
               ]
@@ -298,23 +357,51 @@ const routes: Routes = [
         },
         {
           path: 'recurring-deposit-products',
-          component: RecurringDepositProductsComponent,
-          resolve: {
-                recurringDepositProducts: RecurringDepositProductsResolver
-          },
           data: { title:  extract('Recurring Deposit Products'), breadcrumb: 'Recurring Deposit Products' },
+          children: [
+            {
+              path: 'create',
+              component: CreateRecurringDepositProductComponent,
+              data: { title: extract('Create Recurring Deposit Product'), breadcrumb: 'Create' },
+              resolve: {
+                recurringDepositProductsTemplate: RecurringDepositProductsTemplateResolver
+              }
+            },
+            {
+              path: '',
+              component: RecurringDepositProductsComponent,
+              resolve: {
+                recurringDepositProducts: RecurringDepositProductsResolver
+              }
+            },
+            {
+              path: ':id',
+              data: { title: extract('View Recurring Deposit Product'), routeParamBreadcrumb: 'id' },
+              children: [
+                {
+                  path: '',
+                  component: ViewRecurringDepositProductComponent,
+                  resolve: {
+                    recurringDepositProduct: RecurringDepositProductResolver,
+                    recurringDepositProductsTemplate: RecurringDepositProductsTemplateResolver
+                  }
+                },
+                {
+                  path: 'edit',
+                  data: { title: extract('Edit Recurring Deposit Product'), breadcrumb: 'edit', routeParamBreadcrumb: false },
+                  component: EditRecurringDepositProductComponent,
+                  resolve: {
+                    recurringDepositProductAndTemplate: RecurringDepositProductAndTemplateResolver
+                  }
+                }
+              ]
+            }
+          ]
         },
         {
           path: 'fixed-deposit-products',
           data: { title:  extract('Fixed Deposit Products'), breadcrumb: 'Fixed Deposit Products' },
           children: [
-            {
-              path: '',
-              component: FixedDepositProductsComponent,
-              resolve: {
-                    fixedDepositProducts: FixedDepositProductsResolver
-              },
-            },
             {
               path: 'create',
               component: CreateFixedDepositProductComponent,
@@ -322,6 +409,35 @@ const routes: Routes = [
               resolve: {
                 fixedDepositProductsTemplate: FixedDepositProductsTemplateResolver
               }
+            },
+            {
+              path: '',
+              component: FixedDepositProductsComponent,
+              resolve: {
+                fixedDepositProducts: FixedDepositProductsResolver
+              },
+            },
+            {
+              path: ':id',
+              data: { title: extract('View Fixed Deposit Product'), routeParamBreadcrumb: 'id' },
+              children: [
+                {
+                  path: '',
+                  component: ViewFixedDepositProductComponent,
+                  resolve: {
+                    fixedDepositProduct: FixedDepositProductResolver,
+                    fixedDepositProductsTemplate: FixedDepositProductsTemplateResolver
+                  }
+                },
+                {
+                  path: 'edit',
+                  data: { title: extract('Edit Fixed Deposit Product'), breadcrumb: 'edit', routeParamBreadcrumb: false },
+                  component: EditFixedDepositProductComponent,
+                  resolve: {
+                    fixedDepositProductAndTemplate: FixedDepositProductAndTemplateResolver
+                  }
+                }
+              ]
             }
           ]
         },
@@ -330,20 +446,41 @@ const routes: Routes = [
           data: { title:  extract('Products Mix'), breadcrumb: 'Products Mix' },
           children: [
             {
-              path: '',
-              component: ProductsMixComponent,
+              path: 'create',
+              component: CreateProductMixComponent,
+              data: { title: extract('Create Product Mix'), breadcrumb: 'Create' },
               resolve: {
-                    products: ProductsMixResolver
+                productsMixTemplate: ProductsMixTemplateResolver
               }
             },
             {
-              path: ':id',
-              component: ViewProductMixComponent,
-              data: { title: extract('View Product Mix'), routeParamBreadcrumb: 'id'},
+              path: '',
+              component: ProductsMixComponent,
               resolve: {
-                productMix: ViewProductMixResolver
+                products: ProductsMixResolver
               },
-            }
+            },
+            {
+              path: ':id',
+              data: { title: extract('View Product Mix'), routeParamBreadcrumb: 'id'},
+              children: [
+                {
+                  path: '',
+                  component: ViewProductMixComponent,
+                  resolve: {
+                    productMix: ViewProductMixResolver
+                  }
+                },
+                {
+                  path: 'edit',
+                  data: { title: extract('Edit Product Mix'), breadcrumb: 'Edit', routeParamBreadcrumb: false },
+                  component: EditProductMixComponent,
+                  resolve: {
+                    productMix: ViewProductMixResolver
+                  }
+                },
+              ]
+            },
           ]
         },
         {
@@ -385,11 +522,18 @@ const routes: Routes = [
             }
           ]
         },
-
         {
           path: 'charges',
           data: { title: extract('Charges'), breadcrumb: 'Charges' },
           children: [
+            {
+              path: 'create',
+              component: CreateChargeComponent,
+              data: { title: extract('Create Charge'), breadcrumb: 'Create Charge' },
+              resolve: {
+                chargesTemplate: ChargesTemplateResolver
+              }
+            },
             {
               path: '',
               component: ChargesComponent,
@@ -397,7 +541,6 @@ const routes: Routes = [
                 charges: ChargesResolver
               }
             },
-
             {
               path: ':id',
               data: { title: extract('View Charges'), routeParamBreadcrumb: 'id' },
@@ -414,7 +557,7 @@ const routes: Routes = [
                   component: EditChargeComponent,
                   data: { title: extract('Edit Charge'), breadcrumb: 'Edit', routeParamBreadcrumb: false },
                   resolve: {
-                    chargesTemplate: ChargesTemplateResolver
+                    chargesTemplate: ChargesTemplateAndResolver
                   }
                 },
               ]
@@ -448,8 +591,10 @@ const routes: Routes = [
     ShareProductResolver,
     ShareProductAndTemplateResolver,
     RecurringDepositProductsResolver,
+    RecurringDepositProductResolver,
     ChargesResolver,
     ChargeResolver,
+    ChargesTemplateAndResolver,
     ChargesTemplateResolver,
     FixedDepositProductsResolver,
     FixedDepositProductsTemplateResolver,
@@ -463,7 +608,16 @@ const routes: Routes = [
     TaxComponentTemplateResolver,
     EditTaxComponentComponent,
     TaxGroupResolver,
-    DividendsResolver
+    DividendsResolver,
+    RecurringDepositProductsTemplateResolver,
+    RecurringDepositProductAndTemplateResolver,
+    ViewDividendDataResolver,
+    FixedDepositProductResolver,
+    ManageTaxGroupTemplateResolver,
+    EditTaxGroupResolver,
+    ProductsMixTemplateResolver,
+    FixedDepositProductAndTemplateResolver,
+    FloatingRatesResolver
   ]
 })
 export class ProductsRoutingModule { }

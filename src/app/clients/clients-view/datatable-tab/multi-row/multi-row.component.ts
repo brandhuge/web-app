@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, OnChanges, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatTable } from '@angular/material/table';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { FormfieldBase } from 'app/shared/form-dialog/formfield/model/formfield-base';
 import { InputBase } from 'app/shared/form-dialog/formfield/model/input-base';
 import { SelectBase } from 'app/shared/form-dialog/formfield/model/select-base';
@@ -14,6 +14,7 @@ import { DeleteDialogComponent } from '../../../../shared/delete-dialog/delete-d
 
 /** Custom Services */
 import { ClientsService } from '../../../clients.service';
+import { SettingsService } from 'app/settings/settings.service';
 
 @Component({
   selector: 'mifosx-multi-row',
@@ -21,7 +22,7 @@ import { ClientsService } from '../../../clients.service';
   styleUrls: ['./multi-row.component.scss']
 })
 export class MultiRowComponent implements OnInit, OnChanges {
-  @ViewChild('dataTable') dataTableRef: MatTable<Element>;
+  @ViewChild('dataTable', { static: true }) dataTableRef: MatTable<Element>;
   @Input() dataObject: any;
   datatableName: string;
   datatableColumns: string[] = [];
@@ -32,7 +33,8 @@ export class MultiRowComponent implements OnInit, OnChanges {
   constructor(private route: ActivatedRoute,
     private datePipe: DatePipe,
     private clientsService: ClientsService,
-    private dialog: MatDialog) {
+    private dialog: MatDialog,
+    private settingsService: SettingsService) {
     this.clientId = this.route.parent.parent.snapshot.paramMap.get('clientId');
   }
 
@@ -51,7 +53,7 @@ export class MultiRowComponent implements OnInit, OnChanges {
 
   add() {
     let dataTableEntryObject: any = {
-      locale: 'en'
+      locale: this.settingsService.language.code
     };
     const dateTransformColumns: string[] = [];
     const columns = this.dataObject.columnHeaders.filter((column: any) => {

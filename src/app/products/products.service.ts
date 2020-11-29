@@ -95,10 +95,48 @@ export class ProductsService {
   }
 
   /**
+   * Create Dividend.
+   * @param shareProductId Share Product Id.
+   * @param dividendData Dividend Data.
+   * @returns {Observable<any>}
+   */
+  createDividend(shareProductId: string, dividendData: any): Observable<any> {
+    return this.http.post(`/shareproduct/${shareProductId}/dividend`, dividendData);
+  }
+
+  getDividendData(shareProductId: any, dividendId: any): Observable<any> {
+    const httpParams = new HttpParams().set('dateFormat', 'dd MMMM yyyy')
+                                        .set('limit', '10')
+                                        .set('locale', 'en')
+                                        .set('offset', '0');
+    return this.http.get(`/shareproduct/${shareProductId}/dividend/${dividendId}`, { params: httpParams });
+  }
+
+  approveDividend(shareProductId: any, dividendId: any, data: any): Observable<any> {
+    const httpParams = new HttpParams().set('command', 'approve');
+    return this.http.put(`/shareproduct/${shareProductId}/dividend/${dividendId}`, data, { params: httpParams });
+
+  }
+
+  /**
    * @returns {Observable<any>} Recurring deposit products data
    */
   getRecurringDepositProducts(): Observable<any> {
     return this.http.get('/recurringdepositproducts');
+  }
+
+  /**
+   * @param {string} recurringDepositProductId Product Id of recurring Deposit
+   * @param {boolean} template Template
+   * @return {Observable<any>} Recurring Deposit Product Details
+   */
+  getRecurringDepositProduct(recurringDepositProductId: string, template: boolean = false): Observable<any> {
+    const httpParams = new HttpParams().set('template', template.toString());
+    return this.http.get(`/recurringdepositproducts/${recurringDepositProductId}`, { params: httpParams });
+  }
+
+  getRecurringDepositProductsTemplate(): Observable<any> {
+    return this.http.get('/recurringdepositproducts/template');
   }
 
   /**
@@ -138,6 +176,14 @@ export class ProductsService {
   }
 
   /**
+   * @param {any} charge Charge to be created.
+   * @returns {Observable<any>}
+   */
+  createCharge(charge: any): Observable<any> {
+    return this.http.post('/charges', charge);
+  }
+
+  /**
    * @returns {Observable<any>} Fixed deposit products data
    */
   getFixedDepositProducts(): Observable<any> {
@@ -150,6 +196,23 @@ export class ProductsService {
 
   getFixedDepositProductsTemplate(): Observable<any> {
     return this.http.get('/fixeddepositproducts/template');
+  }
+
+  /**
+   * @param {string} fixedDepositProductId fixed deposit product ID of fixed deposit product.
+   * @returns {Observable<any>} Fixed deposit product.
+   */
+  getFixedDepositProduct(fixedDepositProductId: string): Observable<any> {
+    return this.http.get(`/fixeddepositproducts/${fixedDepositProductId}`);
+  }
+
+  getFixedDepositProductAndTemplate(fixedDepositProductId: any) {
+    const httpParams = new HttpParams().set('template', 'true');
+    return this.http.get(`/fixeddepositproducts/${fixedDepositProductId}`, { params: httpParams });
+  }
+
+  updateFixedDepositProduct(fixedDepositProductId: any, fixedDepositProduct: any): Observable<any> {
+    return this.http.put(`/fixeddepositproducts/${fixedDepositProductId}`, fixedDepositProduct);
   }
 
   /**
@@ -199,10 +262,36 @@ export class ProductsService {
 
   /**
    * @param {string} taxGroupId Tax Component ID of Tax Component.
+   * @param {string} template Template
    * @returns {Observable<any>} Tax Component.
    */
-  getTaxGroup(taxGroupId: string): Observable<any> {
-    return this.http.get(`/taxes/group/${taxGroupId}`);
+  getTaxGroup(taxGroupId: string, template: string): Observable<any> {
+    const httpParams = new HttpParams().set('template', template);
+    return this.http.get(`/taxes/group/${taxGroupId}`, { params: httpParams });
+  }
+
+  /**
+   * @returns {Observable<any>} Tax Group Template
+   */
+  getTaxGroupTemplate(): Observable<any> {
+    return this.http.get('/taxes/group/template');
+  }
+
+  /**
+   * @param {any} taxGroup Tax Group
+   * @returns {Observable<any>} Tax Group Resource Id
+   */
+  createTaxGroup(taxGroup: any): Observable<any> {
+    return this.http.post('/taxes/group', taxGroup);
+  }
+
+  /**
+   * @param {any} taxGroupId Tax Group ID
+   * @param {any} taxGroup Tax Group
+   * @returns {Observable<any>} Changes in the Tax Group
+   */
+  updateTaxGroup(taxGroupId: any, taxGroup: any): Observable<any> {
+    return this.http.put(`/taxes/group/${taxGroupId}`, taxGroup);
   }
 
   /**
@@ -253,4 +342,72 @@ export class ProductsService {
   getProductMix(productId: string): Observable<any> {
     return this.http.get(`/loanproducts/${productId}/productmix`);
   }
+
+  /*
+   * @returns {Observable<any>} Products mix Template data
+   */
+  getProductsMixTemplate(): Observable<any> {
+    let httpParams = new HttpParams();
+    httpParams = httpParams.set('isProductMixTemplate', 'true');
+    return this.http.get('/loanproducts/template', { params: httpParams });
+  }
+
+  /**
+   * @param {string} productMixId product mix ID of product mix.
+   * @returns {Observable<any>} Product mix Template data
+   */
+  getProductMixTemplate(productMixId: string): Observable<any> {
+    let httpParams = new HttpParams();
+    httpParams = httpParams.set('template', 'true');
+    return this.http.get(`/loanproducts/${productMixId}/productmix`, { params: httpParams });
+  }
+
+  /**
+   * @param {string} productMixId product mix ID of product mix.
+   * @param {any} productMix Product mix to be created.
+   * @returns {Observable<any>}
+   */
+  createProductMix(productMix: any, productMixId: string): Observable<any> {
+    return this.http.post(`/loanproducts/${productMixId}/productmix`, productMix);
+  }
+
+  /**
+   * @param {string} productMixId product mix ID of product mix.
+   * @param {any} productMix Product mix to be updaated.
+   * @returns {Observable<any>}
+   */
+  updateProductMix(productMix: any, productMixId: string): Observable<any> {
+    return this.http.put(`/loanproducts/${productMixId}/productmix`, productMix);
+  }
+
+  /**
+   * @param {string} productMixId product mix ID of product mix.
+   * @returns {Observable<any>}
+   */
+  deleteProductMix(productMixId: string): Observable<any> {
+    return this.http.delete(`/loanproducts/${productMixId}/productmix`);
+  }
+
+  /*
+   * @param {string} productId Product ID
+   * @returns {Observable<any>}
+   */
+  getAllInterestRateCharts(productId: string): Observable<any> {
+    const httpParams = new HttpParams().set('productId', productId);
+    return this.http.get(`/interestratecharts`, {params: httpParams});
+  }
+
+  createRecurringDepositProduct(recurringDepositProduct: any): Observable<any> {
+    return this.http.post('/recurringdepositproducts', recurringDepositProduct);
+  }
+
+  getRecurringDepositProductAndTemplate(recurringDepositProductId: any) {
+    const httpParams = new HttpParams().set('template', 'true');
+    return this.http.get(`/recurringdepositproducts/${recurringDepositProductId}`, { params: httpParams });
+  }
+
+  updateRecurringDepositProduct(recurringDepositProductId: any, recurringDepositProduct: any): Observable<any> {
+    return this.http.put(`/recurringdepositproducts/${recurringDepositProductId}`, recurringDepositProduct);
+  }
+
 }

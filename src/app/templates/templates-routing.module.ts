@@ -11,10 +11,14 @@ import { extract } from '../core/i18n/i18n.service';
 /** Custom Components */
 import { TemplatesComponent } from './templates.component';
 import { ViewTemplateComponent } from './view-template/view-template.component';
+import { EditTemplateComponent } from './edit-template/edit-template.component';
+import { CreateTemplateComponent } from './create-template/create-template.component';
 
 /** Custom Resolvers */
-import { TemplatesResolver } from './templates.resolver';
-import { TemplateResolver } from './template.resolver';
+import { TemplatesResolver } from './common-resolvers/templates.resolver';
+import { TemplateResolver } from './common-resolvers/template.resolver';
+import { EditTemplateResolver } from './common-resolvers/edit-template.resolver';
+import { CreateTemplateResolver } from './common-resolvers/create-template.resolver';
 
 /** Templates Routes */
 const routes: Routes = [
@@ -31,15 +35,31 @@ const routes: Routes = [
           }
         },
         {
-          path: ':id',
-          data: { title: extract('View Template'), routeResolveBreadcrumb: ['template', 'name'] },
+          path: 'create',
+          data: { title: extract('Create Template'), breadcrumb: 'Create Template' },
+          component: CreateTemplateComponent,
           resolve: {
-            template: TemplateResolver
-          },
+            createTemplateData: CreateTemplateResolver
+          }
+        },
+        {
+          path: ':id',
+          data: { title: extract('View Template'), routeParamBreadcrumb: 'id' },
           children: [
             {
               path: '',
               component: ViewTemplateComponent,
+              resolve: {
+                template: TemplateResolver
+              }
+            },
+            {
+              path: 'edit',
+              component: EditTemplateComponent,
+              data: { title: extract('Edit Template'), breadcrumb: 'Edit', routeParamBreadcrumb: false },
+              resolve: {
+                editTemplateData: EditTemplateResolver
+              }
             }
           ]
         }
@@ -58,7 +78,9 @@ const routes: Routes = [
   exports: [RouterModule],
   providers: [
     TemplatesResolver,
-    TemplateResolver
+    TemplateResolver,
+    EditTemplateResolver,
+    CreateTemplateResolver
   ]
 })
 export class TemplatesRoutingModule { }

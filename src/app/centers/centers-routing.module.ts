@@ -14,6 +14,7 @@ import { CentersViewComponent } from './centers-view/centers-view.component';
 import { GeneralTabComponent } from './centers-view/general-tab/general-tab.component';
 import { NotesTabComponent } from './centers-view/notes-tab/notes-tab.component';
 import { DatatableTabComponent } from './centers-view/datatable-tab/datatable-tab.component';
+import { EditCenterComponent } from './edit-center/edit-center.component';
 
 /** Custom Resolvers */
 import { OfficesResolver } from 'app/accounting/common-resolvers/offices.resolver';
@@ -24,6 +25,9 @@ import { CenterSummaryResolver } from './common-resolvers/center-summary.resolve
 import { CenterNotesResolver } from './common-resolvers/center-notes.resolver';
 import { CenterDatatableResolver } from './common-resolvers/center-datatable.resolver';
 import { CenterDatatablesResolver } from './common-resolvers/center-datatables.resolver';
+import { CenterActionsComponent } from './centers-view/center-actions/center-actions.component';
+import { CenterActionsResolver } from './common-resolvers/center-actions.resolver';
+import { CenterDataAndTemplateResolver } from './common-resolvers/center-data-and-template.resolver';
 
 const routes: Routes = [
   Route.withShell([
@@ -46,41 +50,66 @@ const routes: Routes = [
         },
         {
           path: ':centerId',
-          component: CentersViewComponent,
           data: { title: extract('Centers View'), routeParamBreadcrumb: 'centerId' },
-          resolve: {
-            centerViewData: CenterViewResolver,
-            centerDatatables: CenterDatatablesResolver
-          },
           children: [
             {
-              path: 'general',
-              component: GeneralTabComponent,
-              data: { title: extract('General'), breadcrumb: 'General', routeParamBreadcrumb: false },
+              path: '',
+              component: CentersViewComponent,
               resolve: {
-                centerSummaryData: CenterSummaryResolver,
-                centerViewData: CenterResourceResolver,
-                savingsAccountData: SavingsAccountResolver
-              }
-            },
-            {
-              path: 'notes',
-              component: NotesTabComponent,
-              data: { title: extract('Notes'), breadcrumb: 'Notes', routeParamBreadcrumb: false },
-              resolve: {
-                centerNotes: CenterNotesResolver
-              }
-            },
-            {
-              path: 'datatables',
-              children: [{
-                path: ':datatableName',
-                component: DatatableTabComponent,
-                data: { title: extract('Data Table View'), routeParamBreadcrumb: 'datatableName' },
-                resolve: {
-                  centerDatatable: CenterDatatableResolver
+                centerViewData: CenterViewResolver,
+                centerDatatables: CenterDatatablesResolver
+              },
+              children: [
+                {
+                  path: 'general',
+                  component: GeneralTabComponent,
+                  data: { title: extract('General'), breadcrumb: 'General', routeParamBreadcrumb: false },
+                  resolve: {
+                    centerSummaryData: CenterSummaryResolver,
+                    centerViewData: CenterResourceResolver,
+                    savingsAccountData: SavingsAccountResolver
+                  }
+                },
+                {
+                  path: 'notes',
+                  component: NotesTabComponent,
+                  data: { title: extract('Notes'), breadcrumb: 'Notes', routeParamBreadcrumb: false },
+                  resolve: {
+                    centerNotes: CenterNotesResolver
+                  }
+                },
+                {
+                  path: 'datatables',
+                  children: [{
+                    path: ':datatableName',
+                    component: DatatableTabComponent,
+                    data: { title: extract('Data Table View'), routeParamBreadcrumb: 'datatableName' },
+                    resolve: {
+                      centerDatatable: CenterDatatableResolver
+                    }
+                  }]
                 }
-              }]
+              ]
+            },
+            {
+              path: 'edit',
+              component: EditCenterComponent,
+              data: { title: extract('Edit Center'), breadcrumb: 'Edit', routeParamBreadcrumb: 'Edit' },
+              resolve: {
+                centerData: CenterDataAndTemplateResolver,
+              }
+            },
+            {
+              path: 'actions/:name',
+              data: { title: extract('Center Actions'), routeParamBreadcrumb: 'name' },
+              component: CenterActionsComponent,
+              resolve: {
+                centersActionData: CenterActionsResolver
+              }
+            },
+            {
+              path: 'savings-accounts',
+              loadChildren: () => import('../savings/savings.module').then(m => m.SavingsModule)
             }
           ]
         }
@@ -100,7 +129,9 @@ const routes: Routes = [
     CenterSummaryResolver,
     CenterNotesResolver,
     CenterDatatableResolver,
-    CenterDatatablesResolver
+    CenterDatatablesResolver,
+    CenterActionsResolver,
+    CenterDataAndTemplateResolver
   ]
 })
 export class CentersRoutingModule { }

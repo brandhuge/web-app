@@ -3,9 +3,10 @@ import env from './.env';
 
 export const environment = {
   production: true,
-  version: env.npm_package_version,
-  fineractPlatformTenantId: 'staging',  // For connecting to server running elsewhere update the tenant identifier
-  baseApiUrl: 'https://staging.mifos.io',  // For connecting to server running elsewhere update the base API URL
+  version: env.mifos_x_version,
+  fineractPlatformTenantId: 'default',  // For connecting to server running elsewhere update the tenant identifier
+  baseApiUrl: JSON.parse(localStorage.getItem('mifosXServerURL')) || 'https://demo.fineract.dev',  // For connecting to server running elsewhere update the base API URL
+  allowServerSwitch: env.allow_switching_backend_instance,
   apiProvider: '/fineract-provider/api',
   apiVersion: '/v1',
   serverUrl: '',
